@@ -1,0 +1,1059 @@
+swagger: "2.0"
+info:
+  description: "This is a Sample for API Loan Request Application"
+  version: "1.0.0"
+  title: "API Loan Request Application"
+  contact:
+    email: "IT_DEV@easycredit.vn"
+host: "apipreprod.easycredit.vn"
+basePath: "/api"
+
+schemes:
+- "https"
+paths:
+  /smsServices/v1/sendMessages:
+    post:
+      tags:
+      - "get OTP"
+      summary: "Request get OTP code"
+      operationId: "SmsOTP"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Request get OTP Code"
+        required: true
+        schema:
+          $ref: "#/definitions/SmsOTPRequest"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/BaseResponse"
+        400:
+          description: "Invalid request input"
+        405:
+          description: "Method Not Allow"
+        401:
+          description: "No Authorization"
+      security:
+      - BearerAuth:
+        - "write:loan_request"
+  /loanServices/v1/loanRequest:
+    post:
+      tags:
+      - "loan request"
+      summary: "Send request loan creation AF1"
+      operationId: "LoanApplicationRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Send request loan application"
+        required: true
+        schema:
+          $ref: "#/definitions/LoanApplicationRequest"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/LoanApplicationResponse"
+      security:
+      - BearerAuth:
+        - "write:loan_request"
+  /loanServices/v1/fullLoanRequest:
+    post:
+      tags:
+      - "loan full request"
+      summary: "Send full request loan creation AF2-AF4"
+      operationId: "FullLoanAppRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Send full request loan application AF2-AF4"
+        required: true
+        schema:
+          $ref: "#/definitions/FullLoanAppRequest"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/FullLoanRequestAppResponse"
+        400:
+          description: "Invalid request input"
+        405:
+          description: "Method Not Allow"
+        401:
+          description: "No Authorization"
+      security:
+      - BearerAuth:
+        - "write:loan_request"
+  /loanServices/v1/selectOffer:
+    post:
+      tags:
+      - "select offer request"
+      summary: "request select offer"
+      operationId: "SelectOfferRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Send request select offer"
+        required: true
+        schema:
+          $ref: "#/definitions/SelectOfferRequest"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/OfferSelectionResponse"
+        400:
+          description: "Invalid request input"
+        405:
+          description: "Method Not Allow"
+        401:
+          description: "No Authorization"
+      security:
+      - BearerAuth:
+        - "write:loan_request"
+  /loanServices/v1/uploadDocument:
+    post:
+      tags:
+      - "request upload document"
+      summary: "request select offer"
+      operationId: "DocumentUploadRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "request upload document"
+        required: true
+        schema:
+          $ref: "#/definitions/DocumentUploadRequest"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/UploadDocumentResponse"
+        400:
+          description: "Invalid request input"
+        405:
+          description: "Method Not Allow"
+        401:
+          description: "No Authorization"
+      security:
+      - BearerAuth:
+        - "write:loan_request"
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  BearerAuth:
+    type: "oauth2"
+    authorizationUrl: "https://apipreprod.easycredit.vn/api/uaa/oauth/token?grant_type=client_credentials"
+    flow: "implicit"
+    scopes:
+      write:loan_request: "create loan request"
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  OAuth2:
+    type: "oauth2"
+    flow: accessCode
+    authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://example.com/oauth/token
+    scopes:
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
+definitions:
+  SmsOTPRequest:
+    type: "object"
+    properties:
+      partner_code:
+        type: "string"
+      message: 
+        type: "array"
+        items:
+          $ref: "#/definitions/Message"
+    xml:
+      name: "SmsOTPRequest"
+  Message:
+    type: "object"
+    properties:
+      sms_id:
+        type: "string"
+      phone_number:
+        type: "string"
+    xml:
+      name: "Message"
+  LoanApplicationRequest:
+    type: "object"
+    properties:
+      request_id:
+        type: "string"
+        format: "partner_code + current_timestamp(Milliseconds since Epoch)"
+        pattern: "^[A-Z0-9]{3,7}\\d{13}$"
+        minLength: 16
+        maxLength: 20
+        example: "EPA1571818922353"
+        description: "must be unique."
+      partner_code:
+        type: "string"
+        example: "EPA"
+        description: "must be a valid partner code."
+      customer_name:
+        type: "string"
+        minLength: 1
+        maxLength: 80
+        example: "Trần Văn 'A"
+        description: "must contains only Vietnamese characters or character (') in the middle, no consecutive spaces is allowed."
+      phone_number:
+        type: "string"
+        pattern: "^0(\\d{9,10})$"
+        minLength: 10
+        maxLength: 11
+        example: "01207578870"
+      date_of_birth:
+        type: "string"
+        format: "dd-MM-yyyy"
+        example: "29-10-2000"
+        description: "must be in between year 1900 and 18 years before current."
+      identity_card_id:
+        type: "string"
+        pattern: "^(\\d{9}|\\d{12})$"
+        minLength: 9
+        maxLength: 12
+        example: "012345678912"
+      issue_date:
+        type: "string"
+        example: "29-10-2015"
+        format: "dd-MM-yyyy"
+        description: "must be in between year 1900 and current."
+      issue_place:
+        type: "string"
+        example: "VIP01"
+        description: "refer file attachment for completed LOV."
+      tem_province:
+        type: "string"
+        example: "01"
+        description: "refer file attachment for completed LOV."
+      gender:
+        type: "string"
+        enum: [F, M]
+        description: |
+          F:  female
+          M:  male
+      email:
+        type: "string"
+        pattern: "email"
+        minLength: 1
+        maxLength: 100
+        example: "abc@easycredit.vn"
+      employment_type:
+        type: "string"
+        enum: [E, SE, RP, FE]
+        example: "E"
+        description: |
+          E:  Employee - Đi làm hưởng lương
+          SE: Self employee - Tự kinh doanh
+          RP: Retired - Hưởng lương hưu
+          FE: Freelance - Làm nghề tự do
+      product_type:
+        type: "string"
+        example: "4906"
+        description: "refer file attachment for completed LOV."
+      loan_amount:
+        type: "number"
+        minimum: 0
+        example: 20000000
+        description: "between min range and max range related to product_type."
+      loan_tenor:
+        type: "integer"
+        minimum: 0
+        example: 24
+        description: "between min range and max range related to product_type."
+      otp_code:
+        type: "string"
+        pattern: "^(\\d{6,10})$"
+        minLength: 6
+        maxLength: 10
+        example: "123456"
+      sale_channel:
+        type: "string"
+        enum: [WEB, DSA]
+        example: "DSA"
+      dsa_agent_code:
+        type: "string"
+        pattern: "^([a-zA-Z0-9\\-_\\.]){1,20}$"
+        minLength: 1
+        maxLength: 20
+        example: "abcd_-.ef"
+        description: "must be existed in system, mandatory only if sale_channel is DSA."
+      image_selfie: 
+        type: "string"
+        minLength: 1
+        maxLength: 50
+        example: "PIC_037098000695_07102019011705.pdf"
+        description: "filetype_phonenumber_identitycard.pdf"
+      image_id_card:
+        type: "string"
+        minLength: 1
+        maxLength: 50
+        example: "PID_037098000695_07102019011705.pdf"
+        description: "filetype_phonenumber_identitycard.pdf"
+    required: 
+      - request_id
+      - partner_code
+      - customer_name
+      - phone_number
+      - date_of_birth
+      - identity_card_id
+      - issue_date
+      - issue_place
+      - tem_province
+      - gender
+      - employment_type
+      - product_type
+      - loan_amount
+      - loan_tenor
+      - sale_channel
+    xml:
+      name: "LoanApplicationRequest"
+  FullLoanAppRequest:
+    type: "object"
+    properties:
+      request_id:
+        type: "string"
+        format: "partner_code + current_timestamp(Milliseconds since Epoch)"
+        pattern: "^[A-Z0-9]{3,7}\\d{13}$"
+        minLength: 16
+        maxLength: 20
+        example: "EPA1571818922353"
+        description: "must be unique."
+      partner_code:
+        type: "string"
+        example: "EPA"
+        description: "must be a valid partner code."
+      proposal_id:
+        type: "string"
+        minLength: 10
+        maxLength: 10
+        example: "1234543210"
+        description: "must be existed in system."
+      loan_amount:
+        type: "number"
+        minimum: 0
+        example: 20000000
+        description: "between min range and max range related to product_type."
+      loan_tenor:
+        type: "integer"
+        minimum: 0
+        example: 24
+        description: "between min range and max range related to product_type."
+      installment_amount:
+        type: "number"
+        minimum: 0
+        example: 2000000
+      tem_province:
+        type: "string"
+        example: "01"
+        description: "refer file attachment for completed LOV."
+      tem_district:
+        type: "string"
+        example: "017"
+        description: "refer file attachment for completed LOV."
+      tem_ward:
+        type: "string"
+        example: "00469"
+        description: "refer file attachment for completed LOV."
+      tem_address:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "123 đường abc phường abc quận abc thành phố abc"
+      permanent_province:
+        type: "string"
+        example: "01"
+        description: "refer file attachment for completed LOV."
+      permanent_district:
+        type: "string"
+        example: "00469"
+        description: "refer file attachment for completed LOV."
+      permanent_ward:
+        type: "string"
+        example: "017"
+        description: "refer file attachment for completed LOV."
+      permanent_address:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "123 đường abc phường abc quận abc thành phố abc"
+      occupation:
+        type: "string"
+        example: "DCC"
+        description: "refer file attachment for completed LOV."
+      type_contract:
+        type: "string"
+        example: "DT"
+        description: "refer file attachment for completed LOV, mandatory only if employment_type is Employee."
+      from_date:
+        type: "string"
+        format: "yyyy"
+        example: "2018"
+        minimum: 1900
+        description: "must be before or equal to current year, mandatory only if employment_type is Employee."
+      to_date:
+        type: "string"
+        format: "yyyy"
+        example: "2020"
+        description: "must be after or equal to current year, mandatory only if employment_type is Employee."
+      method_income:
+        type: "string"
+        enum: [CASH, TRANS, MIXED]
+        example: "TRANS"
+        description: |
+          CASH: By cash - Tiền mặt
+          TRANS: Bank transfer - Chuyển khoản
+          MIXED: By Cash and Transfer - Chuyển khoản và tiền mặt
+      frequency_income:
+        type: "string"
+        enum: [D, H, DM, M, T, S, A, OTH]
+        example: "M"
+        description: |
+          D: Daily- Ngày
+          H: Weekly - Tuần
+          DM: Half-monthly - Nửa tháng
+          M: Monthly - Tháng
+          T: Quarterly - Quý
+          S: Half-yearly - Nửa năm
+          A: Annual - Năm
+          OTH: Other - Khác
+      date_income:
+        type: "integer"
+        pattern: "dd"
+        minimum: 1
+        maximum: 31
+        example: "30"
+      monthly_income:
+        type: "number"
+        example: 50000000
+      other_income:
+        type: "number"
+        example: 10000000
+      total_monthly_expenses:
+        type: "number"
+        example: 15000000
+      job_title:
+        type: "string"
+        enum: [RRT, OFS, WKL, SST, TLR, CDY, MAG, BOR, OTH]
+        example: "BOR"
+        description: |
+          RRT: Retire - Hưu trí
+          OFS: Officers - Sỹ quan
+          WKL: Worker / unskilled labour - Công Nhân / Lao Động Phổ Thông
+          SST: Staff / Specialist - Nhân Viên / Chuyên Viên
+          TLR: Team Leader / Supervisor - Trưởng Nhóm / Giám Sát
+          CDY: Chief / Deputy - Trưởng / phó phòng
+          MAG: Manager - Giám đốc
+          BOR: Business owner - Chủ hộ kinh doanh
+          OTH: Others - Khác
+      company_name:
+        type: "string"
+        description: "company name"
+        minLength: 1
+        maxLength: 100
+        example: "company ABC"
+      working_province:
+        type: "string"
+        example: "01"
+        description: "refer file attachment for completed LOV."
+      working_district:
+        type: "string"
+        example: "017"
+        description: "refer file attachment for completed LOV."
+      working_ward:
+        type: "string"
+        example: "00469"
+        description: "refer file attachment for completed LOV."
+      working_address:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "312 đường abc phường abc quận abc thành phố abc"
+      company_phone:
+        type: "string"
+        pattern: "^0(\\d{9,10})$"
+        minLength: 10
+        maxLength: 11
+        example: "01207578871"
+      married_status:
+        type: "string"
+        enum: [V, M, D, C, CON]
+        example: "M"
+        description: |
+          V: Widower - Góa
+          M: Married - Đã kết hôn
+          D: Divorced - Ly hôn
+          C: Single - Độc thân
+          CON: Cohabitation - Sống chung
+      house_type:
+        type: "string"
+        enum: [LOC, A, F, OC, ONC, OTH]
+        example: "ONC"
+        description: |
+          LOC: Tenant - Nhà thuê / mướn / trọ
+          A: Homeownership in process - Ở cùng người thân / họ hàng / bạn bè
+          F: Accomodated by family - Ở cùng cha mẹ
+          OC: Owned (with mortgage) - Nhà sở hữu (đang có nợ vay)
+          ONC: Owned (without mortgage) - Nhà sở hữu (không nợ vay)
+          OTH: Other - Khác
+      other_house_type:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        description: "mandatory only if house_type is Other."
+        example: "Nha tro"
+      number_dependents:
+        type: "integer"
+        minimum: 0
+        maximum: 999
+        example: 1
+      year_of_stay:
+        type: "integer"
+        minimum: 0
+        maximum: 999
+        example: 5
+      loan_purpose:
+        type: "string"
+        enum: [ROL, EMT, HR]
+        example: "ROL"
+        description: |
+          ROL: Expenses for vehicles, household items and appliances - Mua phương tiện đi lại, đồ dùng, trang thiết bị gia đình
+          EMT: Expenses for education, health care, travel, culture, physical training, sports - Chi phí học tập, chữa bệnh, du lịch, văn hóa, thể dục, thể thao
+          HR: Expenses for home renovation - Chi phí sửa chữa nhà ở
+      disbursement_method:
+        type: "string"
+        enum: [1, 2]
+        example: "1"
+        description: |
+          1: Disbursement by bank - Giải ngân theo phương thức chuyển khoản
+          2: Disbursement by cash - Giải ngân theo phương thức nhận tiền trực tiếp
+      bank_code:
+        type: "string"
+        example: "204"
+        description: "refer file attachment for completed LOV, mandatory if disbursement_method is Disbursement by bank."
+      bank_name:
+        type: "string"
+        example: "AGRIBANK-NGÂN HÀNG NÔNG NGHIỆP VÀ PHÁT TRIỂN NÔNG THÔN"
+        description: "refer file attachment for completed LOV, mandatory if disbursement_method is Disbursement by bank."
+      branch_code:
+        type: "string"
+        example: "01204027"
+        description: "refer file attachment for completed LOV, mandatory if disbursement_method is Disbursement by bank."
+      branch_name:
+        type: "string"
+        example: "CN TRUNG YÊN"
+        description: "refer file attachment for completed LOV, mandatory if disbursement_method is Disbursement by bank."
+      bank_province:
+        type: "string"
+        example: "Hà Nội"
+        description: "refer file attachment for completed LOV, mandatory if disbursement_method is Disbursement by bank."
+      account_number:
+        type: "string"
+        pattern: "^\\d{1,20}$"
+        example: "1234123443214321"
+        description: "mandatory if disbursement_method is Disbursement by bank."
+      bank_customer_name:
+        type: "string"
+        minLength: 1
+        maxLength: 80
+        example: "Nguyễn Văn 'B"
+        description: "The character validation is the same as customer_name, mandatory if disbursement_method is Disbursement by bank."
+      other_contact:
+        type: "string"
+        enum: [OME, APPM, DOM, BUR]
+        example: "APPM"
+        description: |
+          OME: Other email - Thư điện tử khác (email)
+          APPM: Mobile apps - Ứng dụng di động (Zalo, Viber…)
+          DOM: Home - Số điện thoại nhà
+          BUR: Office - Số điện thoại công ty
+      detail_contact:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "fb.com/zuck"
+      address_receiving_letter:
+        type: "string"
+        enum: [permanent, current]
+        example: "permanent"
+      relation_1:
+        type: "string"
+        enum: [CP, RSP, PS, CN, SB, HW, RHH, OTH]
+        example: "PS"
+        description: |
+          CP: Compatriotes - Bạn bè / Đồng nghiệp sống cùng tỉnh
+          RSP: Relation with the same province - Họ hàng sống cùng tỉnh
+          PS: Parents - Cha/Mẹ
+          CN: Children - Con
+          SB: Siblings - Anh / Chị / Em ruột
+          HW: Husband / wife - Vợ / Chồng
+          RHH: Relation with the householder - Họ hàng cùng hộ khẩu
+          OTH: Others - Khác
+      relation_1_name:
+        type: "string"
+        minLength: 1
+        maxLength: 80
+        example: "Nguyễn Văn 'B"
+        description: "The character validation is the same as customer_name."
+      relation_1_phone_number:
+        type: "string"
+        pattern: "^0(\\d{9,10})$"
+        minLength: 10
+        maxLength: 11
+        example: "01207578871"
+      relation_2:
+        type: "string"
+        enum: [CP, RSP, PS, CN, SB, HW, RHH, OTH]
+        example: "PS"
+        description: |
+          CP: Compatriotes - Bạn bè / Đồng nghiệp sống cùng tỉnh
+          RSP: Relation with the same province - Họ hàng sống cùng tỉnh
+          PS: Parents - Cha/Mẹ
+          CN: Children - Con
+          SB: Siblings - Anh / Chị / Em ruột
+          HW: Husband / wife - Vợ / Chồng
+          RHH: Relation with the householder - Họ hàng cùng hộ khẩu
+          OTH: Others - Khác
+      relation_2_name:
+        type: "string"
+        minLength: 1
+        maxLength: 80
+        example: "Nguyễn Văn 'C"
+        description: "The character validation is the same as customer_name."
+      relation_2_phone_number:
+        type: "string"
+        pattern: "^0(\\d{9,10})$"
+        minLength: 10
+        maxLength: 11
+        example: "01207578872"
+    required: 
+      - request_id
+      - proposal_id
+      - partner_code
+      - loan_amount
+      - loan_tenor
+      - installment_amount
+      - tem_province
+      - tem_district
+      - tem_ward
+      - tem_address
+      - permanent_province
+      - permanent_district
+      - permanent_ward
+      - permanent_address
+      - occupation
+      - method_income
+      - frequency_income
+      - date_income
+      - monthly_income
+      - other_income
+      - total_monthly_expenses
+      - job_title
+      - company_name
+      - working_province
+      - working_district
+      - working_ward
+      - working_address
+      - company_phone
+      - married_status
+      - house_type
+      - number_dependents
+      - year_of_stay
+      - loan_purpose
+      - disbursement_method
+      - address_receiving_letter
+      - relation_1
+      - relation_1_name
+      - relation_1_phone_number
+      - relation_2
+      - relation_2_name
+      - relation_2_phone_number
+    xml:
+      name: "SendFullLoanRequestApp"
+  SelectOfferRequest:
+    type: "object"
+    properties:
+      request_id:
+        type: "string"
+        format: "partner_code + current_timestamp(Milliseconds since Epoch)"
+        pattern: "^[A-Z0-9]{3,7}\\d{13}$"
+        minLength: 16
+        maxLength: 20
+        example: "EPA1571818922353"
+        description: "must be unique."
+      partner_code:
+        type: "string"
+        example: "EPA"
+        description: "must be a valid partner code."
+      proposal_id:
+        type: "string"
+        minLength: 10
+        maxLength: 10
+        example: "1234543210"
+        description: "must be existed in system."
+      offer_id:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "633566"
+        description: "must be existed in system."
+      offer_amount:
+        type: "number"
+        example: 20000000
+      offer_interest_rate:
+        type: "number"
+        example: 49.3
+      offer_tenor:
+        type: "integer"
+        example: 36
+      offer_insurance_type:
+        type: "string"
+        enum: [NONE, BASC, PREM]
+        example: "BASC"
+        description: |
+          NONE: No insurance.
+          BASC: Basic insurance.
+          PREM: Premium insurance.
+      offer_insurance_amount:
+        type: "number"
+        example: 2000000
+    required: 
+      - request_id
+      - partner_code
+      - proposal_id
+      - offer_id
+      - offer_amount
+      - offer_interest_rate
+      - offer_tenor
+      - offer_insurance_type
+    xml:
+      name: "SelectOfferRequest"
+  DocumentUploadRequest:
+    type: "object"
+    properties:
+      request_id:
+        type: "string"
+        format: "partner_code + current_timestamp(Milliseconds since Epoch)"
+        pattern: "^[A-Z0-9]{3,7}\\d{13}$"
+        minLength: 16
+        maxLength: 20
+        example: "EPA1571818922353"
+        description: "must be unique."
+      partner_code:
+        type: "string"
+        example: "EPA"
+        description: "must be a valid partner code."
+      contract_number:
+        type: "string"
+        minLength: 10
+        maxLength: 10
+        example: "1234543211"
+        description: "must be existed in system."
+      doc_bundle: 
+        type: "array"
+        items:
+          $ref: "#/definitions/BundleDocumentRequest"
+    required: 
+      - request_id
+      - partner_code
+      - contract_number
+      - doc_bundle
+    xml:
+      name: "DocumentUploadRequest"
+  BundleDocumentRequest: 
+    type: "object"
+    properties:
+      bundle_id:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "465226"
+        description: "must be existed in system."
+      list_document:
+        type: "array"
+        items:
+          $ref: "#/definitions/Document"
+    required: 
+      - bundle_name
+      - list_document
+    xml:
+      name: "BundleDocument"
+  Document:
+    type: "object"
+    properties:
+      doc_type:
+        type: "string"
+        minLength: 1
+        maxLength: 100
+        example: "SPID"
+        description: "refer file attachment for completed LOV."
+      doc_name: 
+        type: "string"
+        format: "[contract_number]_[ddMMyyyy]_[bundle_id]_[doc_type]_[version].*"
+        maxLength: 100
+        example: "1234543211_24102019_465226_SPID_1.pdf"
+        description: "each part of doc_name must be valid."
+    required: 
+      - doc_type
+      - doc_name
+    xml:
+      name: "Document"
+  BaseResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 400
+      error:
+        type: "object"
+        properties:
+          code: 
+            type: "string"
+            example: "SERVER_ERROR"
+          message:
+            type: "string"
+            example: "Internal Server Error."
+      data:
+        type: "object"
+        example: null
+    xml:
+      name: "BaseResponse"
+  LoanApplicationResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 400
+      error:
+        type: "object"
+        properties:
+          code: 
+            type: "string"
+            example: "FIELD_ERROR_INVALID_000"
+          message:
+            type: "string"
+            example: "request_id is duplicated. Your input: request_id = 'EPA1571642499178'."
+      data:
+        type: "object"
+        properties:
+          response_code:
+            type: "string"
+            example: "S200"
+          response_message:
+            type: "string"
+            example: "loan request is processing."
+    xml:
+      name: "LoanApplicationResponse"
+  FullLoanRequestAppResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+      error:
+        type: "object"
+        example: null
+        properties:
+          code: 
+            type: "string"
+          message:
+            type: "string"
+      data:
+        type: "object"
+        properties:
+          response_code:
+            type: "string"
+            example: "AV"
+          response_message:
+            type: "string"
+            example: "Accepted with Offer"
+          proposal_id:
+            type: "string"
+            example: "1234543210"
+          offer_list:
+            type: "array"
+            items:
+              $ref: "#/definitions/OfferListResponse"
+    xml:
+      name: "FullLoanRequestAppResponse"
+  OfferListResponse:
+    type: "object"
+    properties:
+      offer_id:
+        type: "string"
+        example: "633566"
+      offer_amount:
+        type: "number"
+        example: 20000000
+      interest_rate:
+        type: "number"
+        example: 49.3
+      monthly_installment:
+        type: "number"
+        example: 2000000
+      tenor: 
+        type: "integer"
+        example: 36
+      min_financed_amount:
+        type: "number"
+        example: 16000000
+      max_financed_amount:
+        type: "number"
+        example: 25000000
+      offer_var:
+        type: "integer"
+        example: 5049
+      offer_type:
+        type: "string"
+        enum: [M, P, N, T]
+        example: "M"
+        description: |
+          M: Main
+          P: Positive
+          N: Negative
+          T: True Negative
+      insurance_type_1:
+        type: "string"
+        enum: [NONE, BASC, PREM]
+        example: "PREM"
+      insurance_amount_1:
+        type: "number"
+        example: 2500000
+      percent_insurance_1:
+        type: "number"
+        example: 0.41
+      base_calculation_1:
+        type: "string"
+        enum: [RA, RANI]
+        example: "RANI"
+      insurance_type_2:
+        type: "string"
+        enum: [NONE, BASC, PREM]
+        example: "BASC"
+      insurance_amount_2:
+        type: "number"
+        example: 2000000
+      percent_insurance_2:
+        type: "number"
+        example: 0.33
+      base_calculation_2:
+        type: "string"
+        enum: [RA, RANI]
+        example: "RANI"
+    xml:
+      name: "OfferListResponse"
+  OfferSelectionResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+      error:
+        type: "object"
+        example: null
+        properties:
+          code: 
+            type: "string"
+          message:
+            type: "string"
+      data:
+        type: "object"
+        properties:
+          response_code:
+            type: "string"
+            example: "SVA"
+          response_message:
+            type: "string"
+            example: "Successul - VALIDATED ACCEPTED"
+          contract_number:
+            type: "string"
+            example: "1234543211"
+          offer_id:
+            type: "string"
+            example: "633566"
+          doc_bundle:
+            type: "array"
+            items:
+              $ref: '#/definitions/OfferBundleResponse'
+    xml:
+      name: "OfferSelectionResponse"
+  OfferBundleResponse:
+    type: "object"
+    properties:
+      bundle_id:
+        type: "string"
+        example: "466626"
+      bundle_name:
+        type: "string"
+        example: "SCAN DL OR FRB OR PASSPORT"
+  UploadDocumentResponse:
+    type: "object"
+    properties:
+      response_code:
+        type: "string"
+        example: "NED"
+      response_message:
+        type: "string"
+        example: "NOT ENOUGH DOC AS REQUIREMENT --> bundleID=[466631]"
+      contract_number:
+        type: "string"
+        example: "1234543211"
+      doc_bundle: 
+        type: "array"
+        items:
+          $ref: "#/definitions/BundleDocumentResponse"
+    xml:
+      name: "UploadDocumentResponse"
+  BundleDocumentResponse:
+    type: "object"
+    properties:
+      bundle_id:
+        type: "string"
+        example: "466626"
+      min_quantity:
+        type: "integer"
+        example: 1
+      upload_quantity:
+        type: "integer"
+        example: 1
+      upload_received_date:
+        type: "string"
+        format: "date"
+        pattern: "dd-MM-yyyy"
+        example: "29-10-2019"
+      status:
+        type: "string"
+        example: "RECEIVED"
+      missing_file_type:
+        type: "string"
+        example: "[SDRL, SFRB]"
+    xml:
+      name: "BundleDocumentResponse"
