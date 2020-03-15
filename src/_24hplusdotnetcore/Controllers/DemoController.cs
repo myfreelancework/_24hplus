@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _24hplusdotnetcore.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class DemoController : ControllerBase
     {
@@ -19,6 +18,10 @@ namespace _24hplusdotnetcore.Controllers
         }
 
         [HttpGet]
+        [Route("api/demos")]
         public List<Demo> Get() => _demoService.Get();
+        [HttpGet]
+        [Route("api/demo/{id}")]
+        public Demo GetDemoById(string id) => _demoService.Get(id);
     }
 } 
