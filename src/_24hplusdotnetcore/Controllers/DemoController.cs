@@ -37,7 +37,7 @@ namespace _24hplusdotnetcore.Controllers
                 var newdemo = _demoService.Create(demo);
                 return Ok(newdemo);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
