@@ -29,7 +29,7 @@ namespace _24hplusdotnetcore.Controllers
         public Demo GetDemoById(string id) => _demoService.Get(id);
 
         [HttpPost]
-        [Route("api/demos")]
+        [Route("api/demo")]
         public ActionResult<Demo> Create(Demo demo)
         {
             try

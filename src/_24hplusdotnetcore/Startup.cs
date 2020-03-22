@@ -30,6 +30,7 @@ namespace _24hplusdotnetcore
             services.Configure<MongoDbConnection>(Configuration.GetSection(nameof(MongoDbConnection)));
             services.AddSingleton<IMongoDbConnection>(sp => sp.GetRequiredService<IOptions<MongoDbConnection>>().Value);
             services.AddSingleton<DemoService>();
+            services.AddSingleton<UserServices>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

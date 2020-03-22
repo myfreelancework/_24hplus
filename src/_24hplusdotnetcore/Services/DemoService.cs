@@ -13,7 +13,7 @@ namespace _24hplusdotnetcore.Services
         {
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
-            _demo = database.GetCollection<Demo>(Constants.DemoCollection);
+            _demo = database.GetCollection<Demo>(MongoCollection.DemoCollection);
         }
         public List<Demo> Get() => _demo.Find(demo => true).ToList();
         public Demo Get(string id) => _demo.Find(d => d.Id == id).FirstOrDefault();
