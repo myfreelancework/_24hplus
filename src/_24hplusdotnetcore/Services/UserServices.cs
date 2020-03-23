@@ -11,7 +11,7 @@ namespace _24hplusdotnetcore.Services
     public class UserServices
     {
         private readonly IMongoCollection<User> _user;
-        public UserServices(MongoDbConnection connection)
+        public UserServices(IMongoDbConnection connection)
         {
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);

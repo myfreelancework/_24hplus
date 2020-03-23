@@ -4,5 +4,6 @@
     {
         public static string DemoCollection = "demo";
         public static string UsersCollection = "Users";
+        public static string UserRoles = "UserRoles";
     }
 }
