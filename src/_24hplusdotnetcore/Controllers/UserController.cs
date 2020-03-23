@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,38 @@ namespace _24hplusdotnetcore.Controllers
             {
                     return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
             }
+        }
+
+        [HttpGet]
+        [Route("api/user")]
+        public ActionResult<List<User>> Get()
+        {
+            try
+            {
+                var lstUser = _userService.Get();
+                return Ok(lstUser);
+            }
+            catch (System.Exception ex)
+            {
+                
+                 return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
+            }
+        }
+
+        [HttpGet]
+        [Route("api/user/{userEmail}")]
+        public ActionResult<User> Get(string userEmail)
+        {
+            try
+            {
+                var objUser = _userService.Get(userEmail);
+                return Ok(objUser);
+            }
+            catch (System.Exception ex)
+            {
+                 return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
+            }
+            
         }
     }
 }
