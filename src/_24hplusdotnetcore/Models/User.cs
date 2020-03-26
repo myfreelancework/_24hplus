@@ -7,10 +7,16 @@ namespace _24hplusdotnetcore.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string UserId { get; set; }
         
         [BsonRequired]
         public string UserEmail { get; set; }
+
+        [BsonRequired]
+        public string UserFirstName { get; set; }
+
+        [BsonRequired]
+        public string UserLastName { get; set; }
 
         [BsonRequired]
         public string UserPassword { get; set; }

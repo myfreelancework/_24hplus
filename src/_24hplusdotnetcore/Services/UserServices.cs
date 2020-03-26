@@ -26,6 +26,8 @@ namespace _24hplusdotnetcore.Services
             CipherServices cipher = new CipherServices(_dataProtectionProvider);
             var userModel = new User();
             userModel.UserEmail = user.UserEmail;
+            userModel.UserFirstName = user.UserFirstName;
+            userModel.UserLastName = user.UserLastName;
             userModel.UserPassword = cipher.Encrypt(user.UserPassword);
             userModel.RoleId = user.RoleId;
             _user.InsertOne(userModel);

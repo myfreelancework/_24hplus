@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,7 @@ namespace _24hplusdotnetcore.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "1")]
         [Route("api/user")]
         public ActionResult<List<User>> Get()
         {
