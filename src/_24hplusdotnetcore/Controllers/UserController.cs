@@ -4,6 +4,7 @@ using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace _24hplusdotnetcore.Controllers
 {
@@ -27,6 +28,7 @@ namespace _24hplusdotnetcore.Controllers
             }
             catch (System.Exception ex)
             {
+                Log.Error(ex, ex.Message);
                     return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
             }
         }
@@ -49,12 +51,12 @@ namespace _24hplusdotnetcore.Controllers
         }
 
         [HttpGet]
-        [Route("api/user/{userEmail}")]
-        public ActionResult<User> Get(string userEmail)
+        [Route("api/user/{userName}")]
+        public ActionResult<User> Get(string userName)
         {
             try
             {
-                var objUser = _userService.Get(userEmail);
+                var objUser = _userService.Get(userName);
                 return Ok(objUser);
             }
             catch (System.Exception ex)

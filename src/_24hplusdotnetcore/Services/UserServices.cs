@@ -3,6 +3,8 @@ using System.Linq;
 using _24hplusdotnetcore.Common;
 using _24hplusdotnetcore.Models;
 using MongoDB.Driver;
+using Serilog;
+using Newtonsoft.Json;
 
 namespace _24hplusdotnetcore.Services
 {
@@ -20,17 +22,27 @@ namespace _24hplusdotnetcore.Services
 
         public User Create(User user)
         {
-            //CipherServices cipher = new CipherServices(_dataProtectionProvider);
             var userModel = new User();
-            userModel.UserName = user.UserName;
-            userModel.UserFirstName = user.UserFirstName;
-            userModel.UserMiddleName = user.UserMiddleName;
-            userModel.UserLastName = user.UserLastName;
-            userModel.UserEmail = user.UserEmail;
-            userModel.UserPassword = user.UserPassword;//cipher.Encrypt(user.UserPassword);
-            userModel.RoleId = user.RoleId;
-            _user.InsertOne(userModel);
-            return userModel;
+            try
+            {                
+                userModel.UserName = user.UserName;
+                userModel.UserFirstName = user.UserFirstName;
+                userModel.UserMiddleName = user.UserMiddleName;
+                userModel.UserLastName = user.UserLastName;
+                userModel.UserEmail = user.UserEmail;
+                userModel.UserPassword = user.UserPassword;//cipher.Encrypt(user.UserPassword);
+                userModel.RoleId = user.RoleId;
+                _user.InsertOne(userModel);
+                Log.Information("Create user successfully: " + JsonConvert.SerializeObject(userModel));
+                return userModel;
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return userModel;
+            }
+            //CipherServices cipher = new CipherServices(_dataProtectionProvider);
+           
         }
 
         public List<User> Get()
