@@ -3,15 +3,13 @@ using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace _24hplusdotnetcore
 {
@@ -33,7 +31,7 @@ namespace _24hplusdotnetcore
             services.AddSingleton<IMongoDbConnection>(sp => sp.GetRequiredService<IOptions<MongoDbConnection>>().Value);
             services.AddSingleton<DemoService>();
             services.AddSingleton<UserServices>();
-            services.AddSingleton<CipherServices>();
+           // services.AddSingleton<CipherServices>();
             services.AddSingleton<AuthServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -50,12 +48,15 @@ namespace _24hplusdotnetcore
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
-            {
-                EncryptionAlgorithm = EncryptionAlgorithm.AES_256_GCM,
-                ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+            // {
+            //     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_GCM,
+            //     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            // }).SetApplicationName("crmhubdotnetcore");
                 
         }
 
@@ -73,6 +74,10 @@ namespace _24hplusdotnetcore
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseMvc();
         }
     }

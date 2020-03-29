@@ -10,13 +10,19 @@ namespace _24hplusdotnetcore.Models
         public string UserId { get; set; }
         
         [BsonRequired]
-        public string UserEmail { get; set; }
+        public string UserName { get; set; }
 
         [BsonRequired]
         public string UserFirstName { get; set; }
 
         [BsonRequired]
+        public string UserMiddleName { get; set; }
+
+        [BsonRequired]
         public string UserLastName { get; set; }
+
+        [BsonRequired]
+        public string UserEmail { get; set; }
 
         [BsonRequired]
         public string UserPassword { get; set; }
