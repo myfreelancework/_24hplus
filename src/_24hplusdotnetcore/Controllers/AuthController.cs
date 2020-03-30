@@ -31,7 +31,7 @@ namespace _24hplusdotnetcore.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, new {message = "username or password incorrect"});
+                    return StatusCode(StatusCodes.Status401Unauthorized, new {message = "username or password is incorrect"});
                 }
             }
             catch (System.Exception ex)

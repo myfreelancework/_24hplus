@@ -62,7 +62,7 @@ namespace _24hplusdotnetcore.Services
                 return lstRoles;
             }
         }
-        public Roles Get(string Id)
+        public Roles GetRoleById(string Id)
         {
             var objRole = new Roles();
             try
@@ -74,6 +74,34 @@ namespace _24hplusdotnetcore.Services
             {
                  _logger.LogError(ex, ex.Message);
                 return objRole;
+            }
+        }
+        public Roles GetRoleByName(string roleName)
+        {
+            var objRole = new Roles();
+            try
+            {
+                objRole = _role.Find(r => r.RoleName == roleName).FirstOrDefault();
+                return objRole;
+            }
+            catch (Exception ex)
+            {
+                 _logger.LogError(ex, ex.Message);
+                return objRole;
+            }
+        }
+        public long Delete(string Id)
+        {
+            long deleteCount = 0;
+            try
+            {                
+                deleteCount = _role.DeleteOne(r => r.Id == Id).DeletedCount;
+                return deleteCount;
+            }
+            catch (System.Exception ex)
+            { 
+                _logger.LogError(ex, ex.Message);
+                return deleteCount;
             }
         }
     }

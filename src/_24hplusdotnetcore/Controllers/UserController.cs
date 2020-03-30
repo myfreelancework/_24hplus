@@ -33,7 +33,7 @@ namespace _24hplusdotnetcore.Controllers
 
         [HttpGet]
         [Authorize(Roles = "1")]
-        [Route("api/user")]
+        [Route("api/users")]
         public ActionResult<List<User>> Get()
         {
             try
