@@ -6,6 +6,7 @@ using System.Text;
 using _24hplusdotnetcore.Common;
 using _24hplusdotnetcore.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
@@ -13,16 +14,18 @@ namespace _24hplusdotnetcore.Services
 {
     public class AuthServices
     {
+        private readonly ILogger<AuthServices> _logger;
         private readonly IMongoCollection<User> _user;
        // private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly IConfiguration _config;
-        public AuthServices(IMongoDbConnection connection, IConfiguration config)
+        public AuthServices(IMongoDbConnection connection, IConfiguration config, ILogger<AuthServices> logger)
         {
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
             _user = database.GetCollection<User>(MongoCollection.UsersCollection);
             //_dataProtectionProvider = dataProtectionProvider;
             _config = config;
+            _logger = logger;
         }
 
         public string Login(User user)
@@ -56,7 +59,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (System.Exception ex)
             {
-                
+                _logger.LogError(ex, ex.Message);
                 throw;
                 
             }

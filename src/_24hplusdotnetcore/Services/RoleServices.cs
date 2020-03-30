@@ -1,7 +1,7 @@
 ﻿using _24hplusdotnetcore.Common;
 using _24hplusdotnetcore.Models;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +10,14 @@ namespace _24hplusdotnetcore.Services
 {
     public class RoleServices
     {
+        private readonly ILogger<RoleServices> _logger;
         private readonly IMongoCollection<Roles> _role;
-        public RoleServices(IMongoDbConnection connection)
+        public RoleServices(IMongoDbConnection connection, ILogger<RoleServices> logger)
         {
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
             _role = database.GetCollection<Roles>(MongoCollection.RolesCollection);
+            _logger = logger;
         }
         public Roles Create(Roles role)
         {
@@ -29,7 +31,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex, ex.Message);
                 return roleModel;
             }
         }
@@ -42,8 +44,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
-
-                Log.Error(ex.Message, ex);
+                 _logger.LogError(ex, ex.Message);
                 return role;
             }
         }
@@ -57,8 +58,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
-
-                Log.Error(ex.Message, ex);
+                 _logger.LogError(ex, ex.Message);
                 return lstRoles;
             }
         }
@@ -72,8 +72,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
-
-                Log.Error(ex.Message, ex);
+                 _logger.LogError(ex, ex.Message);
                 return objRole;
             }
         }

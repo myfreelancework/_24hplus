@@ -4,7 +4,6 @@ using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 
 namespace _24hplusdotnetcore.Controllers
 {
@@ -28,7 +27,6 @@ namespace _24hplusdotnetcore.Controllers
             }
             catch (System.Exception ex)
             {
-                Log.Error(ex, ex.Message);
                     return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
             }
         }
