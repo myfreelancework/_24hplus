@@ -31,6 +31,8 @@ namespace _24hplusdotnetcore
             services.AddSingleton<IMongoDbConnection>(sp => sp.GetRequiredService<IOptions<MongoDbConnection>>().Value);
             services.AddSingleton<DemoService>();
             services.AddSingleton<UserServices>();
+            services.AddSingleton<RoleServices>();
+            services.AddSingleton<CustomerServices>();
            // services.AddSingleton<CipherServices>();
             services.AddSingleton<AuthServices>();
             #endregion
