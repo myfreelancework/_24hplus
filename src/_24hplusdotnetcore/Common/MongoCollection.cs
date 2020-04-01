@@ -8,5 +8,6 @@
         public static string RolesCollection = "Roles";
         public static string CustomerCollection = "Customers";
         public static string ProductCategoryCollection = "ProductCategory";
+        public static string AuthRefresh = "AuthRefresh";
     }
 }
