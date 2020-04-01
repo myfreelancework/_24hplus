@@ -28,15 +28,25 @@ namespace _24hplusdotnetcore.Services
             _logger = logger;
         }
 
-        public string Login(User user)
+        public AuthInfo Login(User user)
         {
+            var authInfo = new AuthInfo();
             var loggedUser = AuthenticateUser(user);
             string token = string.Empty;
             if (loggedUser != null)
             {
                 token = GenerateJSONWebToken(loggedUser);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    authInfo.UserFirstName = loggedUser.UserFirstName;
+                    authInfo.UserMiddleName = loggedUser.UserMiddleName;
+                    authInfo.UserLastName = loggedUser.UserLastName;
+                    authInfo.UserName = loggedUser.UserName;
+                    authInfo.RoleId = loggedUser.RoleId;
+                    authInfo.token = token;
+                }
             }
-            return token;
+            return authInfo;
 
         }
         private User AuthenticateUser(User user)
@@ -72,7 +82,7 @@ namespace _24hplusdotnetcore.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Email, userInfo.UserName),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.UserEmail),
                 new Claim(JwtRegisteredClaimNames.GivenName, userInfo.UserFirstName),
                 new Claim(JwtRegisteredClaimNames.FamilyName, userInfo.UserLastName + " " + userInfo.UserMiddleName),

@@ -1,18 +1,20 @@
-using System.Collections.Generic;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly ILogger<AuthController> _logger;
         private readonly AuthServices _authServices;
-        public AuthController(AuthServices authServices)
+        public AuthController(AuthServices authServices, ILogger<AuthController> logger)
         {
+            _logger = logger;
             _authServices = authServices;
         }
 
@@ -23,11 +25,11 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
-                string tokenString = string.Empty;
-                tokenString = _authServices.Login(user);
-                if (!string.IsNullOrWhiteSpace(tokenString))
+                var authInfo = new AuthInfo();
+                authInfo = _authServices.Login(user);
+                if (authInfo != null)
                 {
-                    return Ok(new { token = tokenString });
+                    return Ok(authInfo);
                 }
                 else
                 {
@@ -36,6 +38,7 @@ namespace _24hplusdotnetcore.Controllers
             }
             catch (System.Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
             }
 
