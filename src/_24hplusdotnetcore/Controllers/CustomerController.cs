@@ -91,10 +91,9 @@ namespace _24hplusdotnetcore.Controllers
         [Route("api/customer/delete")]
         public ActionResult<ResponseMessage> Delete(string MaKH)
         {
-            long deleteCount = 0;
             try
             {
-                deleteCount = deleteCount = _customerServices.DeleteCustomer(MaKH);
+                long deleteCount = deleteCount = _customerServices.DeleteCustomer(MaKH);
                 return Ok(new ResponseMessage { status = StatusCodes.Status200OK.ToString(), message = "Deleted Customer count: " + deleteCount + "" });
             }
             catch (Exception ex)

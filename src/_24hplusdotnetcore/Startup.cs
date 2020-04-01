@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +34,7 @@ namespace _24hplusdotnetcore
             services.AddSingleton<UserServices>();
             services.AddSingleton<RoleServices>();
             services.AddSingleton<CustomerServices>();
+            services.AddSingleton<ProductCategoryServices>();
            // services.AddSingleton<CipherServices>();
             services.AddSingleton<AuthServices>();
             #endregion
@@ -52,6 +54,25 @@ namespace _24hplusdotnetcore
             });
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new List<string>()
+                    }
+                });
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()

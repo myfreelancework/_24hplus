@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserServices _userService;
@@ -32,7 +33,6 @@ namespace _24hplusdotnetcore.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "1")]
         [Route("api/users")]
         public ActionResult<List<User>> Get()
         {
