@@ -12,10 +12,12 @@ namespace _24hplusdotnetcore.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly AuthServices _authServices;
-        public AuthController(AuthServices authServices, ILogger<AuthController> logger)
+        private readonly AuthRefreshServices _authRefreshServices;
+        public AuthController(AuthServices authServices, AuthRefreshServices authRefreshServices, ILogger<AuthController> logger)
         {
             _logger = logger;
             _authServices = authServices;
+            _authRefreshServices = authRefreshServices;
         }
 
         [AllowAnonymous]
@@ -29,7 +31,19 @@ namespace _24hplusdotnetcore.Controllers
                 authInfo = _authServices.Login(user);
                 if (authInfo != null)
                 {
-                    return Ok(authInfo);
+                    var authRefresh = new AuthRefresh();
+                    authRefresh.UserName = authInfo.UserName;
+                    authRefresh.RefresToken = authInfo.RefreshToken;
+                    var newAuthRefresh =  new AuthRefresh();
+                    newAuthRefresh = _authRefreshServices.CreateAuthRefresh(authRefresh);
+                    if (newAuthRefresh != null)
+                    {
+                        return Ok(authInfo);
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status403Forbidden, new {message = "Cannot create refresh token!"});
+                    }
                 }
                 else
                 {

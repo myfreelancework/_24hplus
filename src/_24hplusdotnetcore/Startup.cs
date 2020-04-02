@@ -37,6 +37,7 @@ namespace _24hplusdotnetcore
             services.AddSingleton<ProductCategoryServices>();
            // services.AddSingleton<CipherServices>();
             services.AddSingleton<AuthServices>();
+            services.AddSingleton<AuthRefreshServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

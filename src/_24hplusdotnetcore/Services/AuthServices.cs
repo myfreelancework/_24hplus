@@ -44,6 +44,7 @@ namespace _24hplusdotnetcore.Services
                     authInfo.UserName = loggedUser.UserName;
                     authInfo.RoleId = loggedUser.RoleId;
                     authInfo.token = token;
+                    authInfo.RefreshToken = RandomString(50);
                 }
             }
             return authInfo;
@@ -97,6 +98,13 @@ namespace _24hplusdotnetcore.Services
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        private string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
