@@ -1,3 +1,4 @@
+using System;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -57,5 +58,20 @@ namespace _24hplusdotnetcore.Controllers
             }
 
         }
+        // [AllowAnonymous]
+        // [HttpPost]
+        // [Route("api/auth/refreshtoken")]
+        // public ActionResult RefreshToken(AuthRefresh authRefresh)
+        // {
+        //     try
+        //     {
+        //         _authRefreshServices.GetUserNameByRefreshToken
+        //     }
+        //     catch (Exception ex)
+        //     { 
+        //         _logger.LogError(ex, ex.Message);
+        //         return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+        //     }
+        // }
     }
 }

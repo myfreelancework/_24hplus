@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _24hplusdotnetcore.Controllers
 {
-    [ApiController]
+    //[ApiController]
     public class DemoController : ControllerBase
     {
         private readonly DemoService _demoService;
@@ -20,29 +20,29 @@ namespace _24hplusdotnetcore.Controllers
             _demoService = demoService;
         }
 
-        [HttpGet]
-        [Route("api/demos")]
-        public List<Demo> Get() => _demoService.Get();
+    //     [HttpGet]
+    //     [Route("api/demos")]
+    //     public List<Demo> Get() => _demoService.Get();
 
-        [HttpGet]
-        [Route("api/demo/{id}")]
-        public Demo GetDemoById(string id) => _demoService.Get(id);
+    //     [HttpGet]
+    //     [Route("api/demo/{id}")]
+    //     public Demo GetDemoById(string id) => _demoService.Get(id);
 
-        [HttpPost]
-        [Route("api/demo")]
-        public ActionResult<Demo> Create(Demo demo)
-        {
-            try
-            {
-                var newdemo = _demoService.Create(demo);
-                return Ok(newdemo);
-            }
-            catch (Exception ex)
-            {
+    //     [HttpPost]
+    //     [Route("api/demo")]
+    //     public ActionResult<Demo> Create(Demo demo)
+    //     {
+    //         try
+    //         {
+    //             var newdemo = _demoService.Create(demo);
+    //             return Ok(newdemo);
+    //         }
+    //         catch (Exception ex)
+    //         {
                 
-                return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
-            }
+    //             return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
+    //         }
             
-        }
+    //     }
     }
 } 
