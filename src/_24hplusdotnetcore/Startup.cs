@@ -2,6 +2,7 @@
 using System.Text;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
+using _24hplusdotnetcore.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -87,6 +88,7 @@ namespace _24hplusdotnetcore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,7 +97,7 @@ namespace _24hplusdotnetcore
             {
                 app.UseHsts();
             }
-
+            app.RequestAPIMiddleware();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseSwagger();
