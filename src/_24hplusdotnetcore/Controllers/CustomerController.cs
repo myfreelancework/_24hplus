@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
-    [Authorize]
+    
     public class CustomerController : ControllerBase
     {
         private readonly ILogger<CustomerController> _logger;

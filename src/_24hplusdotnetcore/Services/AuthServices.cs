@@ -16,7 +16,7 @@ namespace _24hplusdotnetcore.Services
     {
         private readonly ILogger<AuthServices> _logger;
         private readonly IMongoCollection<User> _user;
-       // private readonly IDataProtectionProvider _dataProtectionProvider;
+        // private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly IConfiguration _config;
         public AuthServices(IMongoDbConnection connection, IConfiguration config, ILogger<AuthServices> logger)
         {
@@ -50,6 +50,31 @@ namespace _24hplusdotnetcore.Services
             return authInfo;
 
         }
+        public ResponseLoginInfo LoginWithoutRefeshToken(UserLogin userLogin)
+        {
+            var resLogin = new ResponseLoginInfo();
+            string token = string.Empty;
+            try
+            {
+                var loginUser = _user.Find(u => u.UserName == userLogin.UserName && u.UserPassword == userLogin.Password).FirstOrDefault();
+                if (loginUser != null)
+                {
+                    token = GenerateJSONWebTokenWithoutExpired(userLogin);
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        resLogin.UserName = loginUser.UserName;
+                        resLogin.UserFullName = loginUser.UserLastName + " " + loginUser.UserMiddleName + " " + loginUser.UserFirstName;
+                        resLogin.Role = loginUser.RoleId;
+                        resLogin.token = token;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return resLogin;
+        }
         private User AuthenticateUser(User user)
         {
             var loggedUser = new User();
@@ -72,7 +97,7 @@ namespace _24hplusdotnetcore.Services
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
-                
+
             }
             return loggedUser;
         }
@@ -105,6 +130,33 @@ namespace _24hplusdotnetcore.Services
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        private string GenerateJSONWebTokenWithoutExpired(UserLogin userLogin)
+        {
+            string token = "";
+            try
+            {
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                var claims = new[]
+                {
+                        new Claim("UserName", userLogin.UserName),
+                        new Claim("uuid", userLogin.uuid),
+                        new Claim("ostype", userLogin.ostype)
+                    };
+
+                var tokenGenerated = new JwtSecurityToken(_config["Jwt:Issuer"],
+                    _config["Jwt:Issuer"],
+                    claims,
+                    signingCredentials: credentials);
+                token = new JwtSecurityTokenHandler().WriteToken(tokenGenerated);
+
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return token;
         }
     }
 }

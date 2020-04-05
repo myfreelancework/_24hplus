@@ -21,7 +21,7 @@ namespace _24hplusdotnetcore.Controllers
             _authRefreshServices = authRefreshServices;
         }
 
-        [AllowAnonymous]
+       
         [HttpPost]
         [Route("api/auth/login")]
         public ActionResult Login(User user)
@@ -58,20 +58,5 @@ namespace _24hplusdotnetcore.Controllers
             }
 
         }
-        // [AllowAnonymous]
-        // [HttpPost]
-        // [Route("api/auth/refreshtoken")]
-        // public ActionResult RefreshToken(AuthRefresh authRefresh)
-        // {
-        //     try
-        //     {
-        //         _authRefreshServices.GetUserNameByRefreshToken
-        //     }
-        //     catch (Exception ex)
-        //     { 
-        //         _logger.LogError(ex, ex.Message);
-        //         return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
-        //     }
-        // }
     }
 }
