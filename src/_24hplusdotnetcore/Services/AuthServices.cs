@@ -50,16 +50,16 @@ namespace _24hplusdotnetcore.Services
             return authInfo;
 
         }
-        public ResponseLoginInfo LoginWithoutRefeshToken(UserLogin userLogin)
+        public ResponseLoginInfo LoginWithoutRefeshToken(RequestLoginInfo requestLoginInfo)
         {
             var resLogin = new ResponseLoginInfo();
             string token = string.Empty;
             try
             {
-                var loginUser = _user.Find(u => u.UserName == userLogin.UserName && u.UserPassword == userLogin.Password).FirstOrDefault();
+                var loginUser = _user.Find(u => u.UserName == requestLoginInfo.UserName && u.UserPassword == requestLoginInfo.Password).FirstOrDefault();
                 if (loginUser != null)
                 {
-                    token = GenerateJSONWebTokenWithoutExpired(userLogin);
+                    token = GenerateJSONWebTokenWithoutExpired(requestLoginInfo);
                     if (!string.IsNullOrWhiteSpace(token))
                     {
                         resLogin.UserName = loginUser.UserName;
@@ -131,7 +131,7 @@ namespace _24hplusdotnetcore.Services
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        private string GenerateJSONWebTokenWithoutExpired(UserLogin userLogin)
+        private string GenerateJSONWebTokenWithoutExpired(RequestLoginInfo requestLoginInfo)
         {
             string token = "";
             try
@@ -140,9 +140,9 @@ namespace _24hplusdotnetcore.Services
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
                 var claims = new[]
                 {
-                        new Claim("UserName", userLogin.UserName),
-                        new Claim("uuid", userLogin.uuid),
-                        new Claim("ostype", userLogin.ostype)
+                        new Claim("UserName", requestLoginInfo.UserName),
+                        new Claim("uuid", requestLoginInfo.uuid),
+                        new Claim("ostype", requestLoginInfo.ostype)
                     };
 
                 var tokenGenerated = new JwtSecurityToken(_config["Jwt:Issuer"],

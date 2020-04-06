@@ -17,11 +17,23 @@ namespace _24hplusdotnetcore.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            if (context.Request.Headers["Authorization"].Count > 0)
+            {
+                var auth = context.Request.Headers["Authorization"][0];
+            }
+            else
+            {
+                if (context.Request.Path.Value.Contains("api/auth/userlogin") || context.Request.Path.Value.Contains("swagger"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.Headers.Clear();
+                }
+            }
             // Call the next delegate/middleware in the pipeline
             await _next(context);
         }
     }
-    public static class RequestCultureMiddlewareExtensions
+    public static class RequestAPIMiddlewareExtensions
     {
         public static IApplicationBuilder RequestAPIMiddleware(
             this IApplicationBuilder builder)

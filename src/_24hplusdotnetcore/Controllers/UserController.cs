@@ -34,12 +34,16 @@ namespace _24hplusdotnetcore.Controllers
 
         [HttpGet]
         [Route("api/users")]
-        public ActionResult<List<User>> Get()
+        public ActionResult<ResponseContext> Get()
         {
             try
             {
                 var lstUser = _userService.Get();
-                return Ok(lstUser);
+                return Ok(new ResponseContext{
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstUser
+                });
             }
             catch (System.Exception ex)
             {
@@ -50,12 +54,16 @@ namespace _24hplusdotnetcore.Controllers
 
         [HttpGet]
         [Route("api/user/{userName}")]
-        public ActionResult<User> Get(string userName)
+        public ActionResult<ResponseContext> Get(string userName)
         {
             try
             {
                 var objUser = _userService.Get(userName);
-                return Ok(objUser);
+                return Ok(new ResponseContext{
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = objUser
+                });
             }
             catch (System.Exception ex)
             {
