@@ -1,5 +1,8 @@
+using System;
+
 namespace _24hplusdotnetcore.Models
 {
+    [Serializable]
     public class ResponseContext
     {
         public int code { get; set; }

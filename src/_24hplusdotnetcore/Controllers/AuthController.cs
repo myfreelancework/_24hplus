@@ -72,10 +72,11 @@ namespace _24hplusdotnetcore.Controllers
                 {
                     var prevUserLogin = new UserLogin();
                     prevUserLogin = _userLoginServices.Get(requestLoginInfo.UserName);
-                    if (prevUserLogin == null)
+                    if (prevUserLogin == null || prevUserLogin.UserName == null)
                     {
                         var newUserLogin = new UserLogin
                         {
+                            LoginId = "",
                             UserName = requestLoginInfo.UserName,
                             uuid = requestLoginInfo.uuid,
                             ostype = requestLoginInfo.ostype,
@@ -104,13 +105,14 @@ namespace _24hplusdotnetcore.Controllers
                     {
                         var updateUserLogin = new UserLogin
                         {
+                            LoginId = prevUserLogin.LoginId,
                             UserName = requestLoginInfo.UserName,
                             uuid = requestLoginInfo.uuid,
                             ostype = requestLoginInfo.ostype,
                             token = resLogin.token
                         };
-                        var updateCount = _userLoginServices.Update(updateUserLogin);
-                        if (updateCount > 0)
+                        var updateCount = _userLoginServices.Update(prevUserLogin.LoginId, updateUserLogin);
+                        if (updateCount >= 0)
                         {
                             return Ok(new ResponseContext
                             {

@@ -30,7 +30,12 @@ namespace _24hplusdotnetcore.Controllers
             {
                 var lstCustomers = new List<Customer>();
                 lstCustomers = _customerServices.GetList();
-                return Ok(lstCustomers);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstCustomers
+                });
             }
             catch (Exception ex)
             {
@@ -46,7 +51,12 @@ namespace _24hplusdotnetcore.Controllers
             {
                 var objCustomer = new Customer();
                 objCustomer = _customerServices.GetCustomer(MaKH);
-                return Ok(objCustomer);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = objCustomer
+                });
             }
             catch (Exception ex)
             {
@@ -55,6 +65,28 @@ namespace _24hplusdotnetcore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("api/customer/getcustomerbyusername/{username}")]
+        public ActionResult<List<Customer>> GetCustomerByUserName(string username)
+        {
+            try
+            {
+                var lstCustomers = new List<Customer>();
+                lstCustomers = _customerServices.GetCustomerByUserName(username);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstCustomers
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
+
         [HttpPost]
         [Route("api/customer")]
         public ActionResult<Customer> Create(Customer customer)
@@ -63,7 +95,12 @@ namespace _24hplusdotnetcore.Controllers
             {
                 var newCustomer = new Customer();
                 newCustomer =  _customerServices.CreateCustomer(customer);
-                return Ok(newCustomer);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = newCustomer
+                });
             }
             catch (Exception ex)
             {
@@ -75,11 +112,23 @@ namespace _24hplusdotnetcore.Controllers
         [Route("api/customer/update")]
         public ActionResult<ResponseMessage> Update(Customer customer)
         {
-            long updateCount = 0;
             try
             {
-                updateCount = updateCount = _customerServices.UpdateCustomer(customer);
-                return Ok(new ResponseMessage {status = StatusCodes.Status200OK.ToString(), message = "Modified Customer count: "+updateCount+"" });
+                long updateCount = _customerServices.UpdateCustomer(customer);
+                if (updateCount >=0)
+                {
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.SUCCESS,
+                        message = Common.Message.SUCCESS,
+                        data = customer
+                    });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = "Cannot update customer" });
+                }
+                
             }
             catch (Exception ex)
             {
@@ -93,8 +142,24 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
-                long deleteCount = deleteCount = _customerServices.DeleteCustomer(MaKH);
-                return Ok(new ResponseMessage { status = StatusCodes.Status200OK.ToString(), message = "Deleted Customer count: " + deleteCount + "" });
+                long deleteCount = _customerServices.DeleteCustomer(MaKH);
+                if (deleteCount >= 0)
+                {
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.SUCCESS,
+                        message = Common.Message.SUCCESS,
+                        data = new ResponseMessage
+                        {
+                            status = "Delete Successful",
+                            message = "MaKH: "+MaKH+" has been deleted"
+                        }
+                    });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = "Cannot delete customer" });
+                }
             }
             catch (Exception ex)
             {

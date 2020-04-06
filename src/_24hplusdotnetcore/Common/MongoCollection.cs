@@ -10,5 +10,6 @@
         public static string ProductCategoryCollection = "ProductCategory";
         public static string AuthRefresh = "AuthRefresh";
         public static string UserLogin = "UserLogin";
+        public static string CustomerOverview = "CustomerOverview";
     }
 }

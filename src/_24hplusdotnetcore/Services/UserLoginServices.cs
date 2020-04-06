@@ -32,15 +32,16 @@ namespace _24hplusdotnetcore.Services
                 return null;
             }
         }
-        public long Update(UserLogin userLogin)
+        public long Update(string LoginId, UserLogin userLogin)
         {
             long updateCount = 0;
             try
             {
-                updateCount = _userLogin.ReplaceOne(u => u.UserName == userLogin.UserName, userLogin).ModifiedCount;
+                updateCount = _userLogin.ReplaceOne(u => u.LoginId == userLogin.LoginId, userLogin).ModifiedCount;
             }
             catch (Exception ex)
             {
+                updateCount = -1;
                 _logger.LogError(ex, ex.Message);                
             }
             return updateCount;
@@ -68,6 +69,19 @@ namespace _24hplusdotnetcore.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
+            }
+            return userLogin;
+        }
+        public UserLogin GetUserLoginByToken(string token)
+        {
+            var userLogin = new UserLogin();
+            try
+            {
+                userLogin = _userLogin.Find(u => u.token == token).FirstOrDefault();
+            }
+            catch (System.Exception ex)
+            {
+                 _logger.LogError(ex, ex.Message);
             }
             return userLogin;
         }

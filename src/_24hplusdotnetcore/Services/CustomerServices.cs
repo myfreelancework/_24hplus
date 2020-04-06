@@ -45,6 +45,19 @@ namespace _24hplusdotnetcore.Services
             }
             return objCustomer;
         }
+        public List<Customer> GetCustomerByUserName(string UserName)
+        {
+            var lstCustomer = new List<Customer>();
+            try
+            {
+                lstCustomer = _customer.Find(c => c.UserName == UserName).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return lstCustomer;
+        }
         public Customer CreateCustomer(Customer customer)
         {
             try
@@ -67,6 +80,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
+                updateCount = -1;
                 _logger.LogError(ex, ex.Message);
             }
             return updateCount;
@@ -80,6 +94,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (Exception ex)
             {
+                DeleteCount = -1;
                 _logger.LogError(ex, ex.Message);
             }
             return DeleteCount;

@@ -1,18 +1,23 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Globalization;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Builder;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using _24hplusdotnetcore.Models;
 
 namespace _24hplusdotnetcore.Middleware
 {
     public class RequestMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly UserLoginServices _userLoginSerivces;
 
-        public RequestMiddleware(RequestDelegate next)
+        public RequestMiddleware(RequestDelegate next, UserLoginServices userLoginSerivces)
         {
             _next = next;
+            _userLoginSerivces = userLoginSerivces;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -20,17 +25,36 @@ namespace _24hplusdotnetcore.Middleware
             if (context.Request.Headers["Authorization"].Count > 0)
             {
                 var auth = context.Request.Headers["Authorization"][0];
-            }
-            else
-            {
-                if (context.Request.Path.Value.Contains("api/auth/userlogin") || context.Request.Path.Value.Contains("swagger"))
+                var authArray = auth.Split(" ");
+                var token = authArray[1];
+                var userlogin = _userLoginSerivces.GetUserLoginByToken(token);
+                if (userlogin == null || userlogin.UserName == null)
                 {
+                    context.Request.Headers.Add("isLoggedInOtherDevice","true");
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     context.Response.Headers.Clear();
                 }
+                else
+                {
+                    await _next(context);
+                }
+                
+            }
+            else
+            {
+                if (!context.Request.Path.Value.Contains("api/auth/userlogin") && !context.Request.Path.Value.Contains("swagger"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.Headers.Clear();
+                    
+                }
+                else
+                {
+                    await _next(context);
+                }
             }
             // Call the next delegate/middleware in the pipeline
-            await _next(context);
+            
         }
     }
     public static class RequestAPIMiddlewareExtensions
