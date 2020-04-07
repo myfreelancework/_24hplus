@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using _24hplusdotnetcore.Models;
+using System.Runtime.Serialization;
 
 namespace _24hplusdotnetcore.Middleware
 {
@@ -64,5 +65,5 @@ namespace _24hplusdotnetcore.Middleware
         {
             return builder.UseMiddleware<RequestMiddleware>();
         }
-    }
+    }    
 }

@@ -68,7 +68,7 @@ namespace _24hplusdotnetcore.Controllers
             {
                 var resLogin = new ResponseLoginInfo();
                 resLogin = _authServices.LoginWithoutRefeshToken(requestLoginInfo);
-                if (resLogin != null)
+                if (resLogin != null && resLogin.UserName != null)
                 {
                     var prevUserLogin = new UserLogin();
                     prevUserLogin = _userLoginServices.Get(requestLoginInfo.UserName);
