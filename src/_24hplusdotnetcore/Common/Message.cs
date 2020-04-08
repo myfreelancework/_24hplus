@@ -10,9 +10,9 @@ namespace _24hplusdotnetcore.Common
     }
     public enum ResponseCode : int
     {
-        SUCCESS = 1,
-        IS_LOGGED_IN_ORTHER_DEVICE, 
+        SUCCESS = 1, 
         UNAUTHORIZED,
-        ERROR
+        ERROR,
+        IS_LOGGED_IN_ORTHER_DEVICE
     }
 }

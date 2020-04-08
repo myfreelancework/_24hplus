@@ -12,6 +12,7 @@ namespace _24hplusdotnetcore.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserServices _userService;
+        public static bool isLoggedByOrtherDevices;
         public UserController(UserServices userServices)
         {
             _userService = userServices;
@@ -38,6 +39,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var lstUser = _userService.Get();
                 return Ok(new ResponseContext{
                     code = (int)Common.ResponseCode.SUCCESS,
@@ -58,6 +66,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var objUser = _userService.Get(userName);
                 return Ok(new ResponseContext{
                     code = (int)Common.ResponseCode.SUCCESS,
@@ -71,5 +86,6 @@ namespace _24hplusdotnetcore.Controllers
             }
             
         }
+
     }
 }

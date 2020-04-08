@@ -23,6 +23,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var lstRole = _roleService.Get();
                 return Ok(lstRole);
             }
@@ -39,6 +46,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var objRole = _roleService.GetRoleByName(roleName);
                 return Ok(objRole);
             }
@@ -54,6 +68,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var newRole = _roleService.Create(role);
                 return Ok(newRole);
             }

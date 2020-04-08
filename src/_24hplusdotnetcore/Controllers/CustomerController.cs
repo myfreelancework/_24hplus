@@ -28,6 +28,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var lstCustomers = new List<Customer>();
                 lstCustomers = _customerServices.GetList();
                 return Ok(new ResponseContext
@@ -49,6 +56,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var objCustomer = new Customer();
                 objCustomer = _customerServices.GetCustomer(MaKH);
                 return Ok(new ResponseContext
@@ -71,6 +85,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var lstCustomers = new List<Customer>();
                 lstCustomers = _customerServices.GetCustomerByUserName(username);
                 return Ok(new ResponseContext
@@ -93,6 +114,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var newCustomer = new Customer();
                 newCustomer =  _customerServices.CreateCustomer(customer);
                 return Ok(new ResponseContext
@@ -114,6 +142,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 long updateCount = _customerServices.UpdateCustomer(customer);
                 if (updateCount >=0)
                 {
@@ -142,6 +177,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 long deleteCount = _customerServices.DeleteCustomer(MaKH);
                 if (deleteCount >= 0)
                 {

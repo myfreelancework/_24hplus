@@ -29,6 +29,13 @@ namespace _24hplusdotnetcore.Controllers
             var lstProductCategory = new List<ProductCategory>();
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 lstProductCategory = _productCategoryServices.GetProductCategories();
                 return Ok(lstProductCategory);
             }
@@ -45,6 +52,13 @@ namespace _24hplusdotnetcore.Controllers
             var objProductCategory = new ProductCategory();
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 objProductCategory = _productCategoryServices.GetProductCategory(MaLoaiSanPham);
                 return Ok(objProductCategory);
             }
@@ -60,6 +74,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 _productCategoryServices.Create(productCategory);
                 return Ok(productCategory);
             }

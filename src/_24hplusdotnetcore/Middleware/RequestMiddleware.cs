@@ -31,15 +31,14 @@ namespace _24hplusdotnetcore.Middleware
                 var userlogin = _userLoginSerivces.GetUserLoginByToken(token);
                 if (userlogin == null || userlogin.UserName == null)
                 {
-                    context.Request.Headers.Add("isLoggedInOtherDevice","true");
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    context.Response.Headers.Clear();
+                    context.Items["isLoggedInOtherDevice"] = true;
                 }
                 else
                 {
-                    await _next(context);
+                    context.Items["isLoggedInOtherDevice"] = false;
                 }
-                
+                await _next(context);
+
             }
             else
             {

@@ -24,6 +24,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var lstLoaicv = new List<LoaiHinhCongViec>();
                 lstLoaicv = _loaiCVServices.GetList();
                 return Ok(new ResponseContext
@@ -49,6 +56,13 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
                 var objLoaiCV = new LoaiHinhCongViec();
                 objLoaiCV = _loaiCVServices.GetLoaiHinhCongViec(MaLoaiCV);
                 return Ok(new ResponseContext
