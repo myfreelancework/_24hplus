@@ -29,5 +29,18 @@ namespace _24hplusdotnetcore.Services
             }
             return lstLoaiCV;
         }
+        public LoaiHinhCongViec GetLoaiHinhCongViec(string MaLoaiCV)
+        {
+            var objLoaiCV = new LoaiHinhCongViec();
+            try
+            {
+                objLoaiCV = _loaiCV.Find(c => c.MaLoaiCV == MaLoaiCV).FirstOrDefault();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return objLoaiCV;
+        }
     }
 }

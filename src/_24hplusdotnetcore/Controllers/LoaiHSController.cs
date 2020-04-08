@@ -19,7 +19,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/loaihoso")]
-        public ActionResult<List<LoaiHoSo>> GetList()
+        public ActionResult<ResponseContext> GetList()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/loaihoso/{MaLoaiHS}")]
-        public ActionResult<List<LoaiHoSo>> GetLoaiHSByMaLoaiHS( string MaLoaiHS)
+        public ActionResult<ResponseContext> GetLoaiHSByMaLoaiHS( string MaLoaiHS)
         {
             try
             {

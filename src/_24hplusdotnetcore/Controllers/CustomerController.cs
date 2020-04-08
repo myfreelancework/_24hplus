@@ -24,7 +24,7 @@ namespace _24hplusdotnetcore.Controllers
         
         [HttpGet]
         [Route("api/customers")]
-        public ActionResult<List<Customer>> GetCustomerList()
+        public ActionResult<ResponseContext> GetCustomerList()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/customer/{MaKH}")]
-        public ActionResult<Customer> GetCustomer(string MaKH)
+        public ActionResult<ResponseContext> GetCustomer(string MaKH)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/customer/getcustomerbyusername/{username}")]
-        public ActionResult<List<Customer>> GetCustomerByUserName(string username)
+        public ActionResult<ResponseContext> GetCustomerByUserName(string username)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace _24hplusdotnetcore.Controllers
 
         [HttpPost]
         [Route("api/customer")]
-        public ActionResult<Customer> Create(Customer customer)
+        public ActionResult<ResponseContext> Create(Customer customer)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/customer/update")]
-        public ActionResult<ResponseMessage> Update(Customer customer)
+        public ActionResult<ResponseContext> Update(Customer customer)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/customer/delete")]
-        public ActionResult<ResponseMessage> Delete(string MaKH)
+        public ActionResult<ResponseContext> Delete(string MaKH)
         {
             try
             {
