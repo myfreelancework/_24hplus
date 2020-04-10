@@ -19,7 +19,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/roles")]
-        public ActionResult<List<Roles>> Get()
+        public ActionResult<ResponseContext> Get()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/role/{roleName}")]
-        public ActionResult<Roles> GetRoleByName(string roleName)
+        public ActionResult<ResponseContext> GetRoleByName(string roleName)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/role")]
-        public ActionResult<Roles> Create(Roles role)
+        public ActionResult<ResponseContext> Create(Roles role)
         {
             try
             {
