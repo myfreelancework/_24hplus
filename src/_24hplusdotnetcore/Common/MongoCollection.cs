@@ -13,5 +13,6 @@
         public static string UserLogin = "UserLogin";
         public static string CustomerOverview = "CustomerOverview";
         internal static string LoaiCV = "LoaiHinhCongViec";
+        internal static string MobileVersion = "MobileVersion";
     }
 }

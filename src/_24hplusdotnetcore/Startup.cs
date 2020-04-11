@@ -42,6 +42,7 @@ namespace _24hplusdotnetcore
             services.AddSingleton<UserLoginServices>();
             services.AddSingleton<LoaiHoSoServices>();
             services.AddSingleton<UserRoleServices>();
+            services.AddSingleton<MobileVersionServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
