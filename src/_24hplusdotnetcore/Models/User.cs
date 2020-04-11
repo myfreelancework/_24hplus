@@ -28,6 +28,6 @@ namespace _24hplusdotnetcore.Models
         public string UserPassword { get; set; }
 
         [BsonRequired]
-        public string RoleId { get; set; }
+        public string RoleName { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace _24hplusdotnetcore.Services
                     authInfo.UserMiddleName = loggedUser.UserMiddleName;
                     authInfo.UserLastName = loggedUser.UserLastName;
                     authInfo.UserName = loggedUser.UserName;
-                    authInfo.RoleId = loggedUser.RoleId;
+                    authInfo.RoleId = loggedUser.RoleName;
                     authInfo.token = token;
                     authInfo.RefreshToken = RandomString(50);
                 }
@@ -64,7 +64,7 @@ namespace _24hplusdotnetcore.Services
                     {
                         resLogin.UserName = loginUser.UserName;
                         resLogin.UserFullName = loginUser.UserLastName + " " + loginUser.UserMiddleName + " " + loginUser.UserFirstName;
-                        resLogin.Role = loginUser.RoleId;
+                        resLogin.Role = loginUser.RoleName;
                         resLogin.token = token;
                     }
                 }
@@ -112,8 +112,8 @@ namespace _24hplusdotnetcore.Services
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.UserEmail),
                 new Claim(JwtRegisteredClaimNames.GivenName, userInfo.UserFirstName),
                 new Claim(JwtRegisteredClaimNames.FamilyName, userInfo.UserLastName + " " + userInfo.UserMiddleName),
-                new Claim("Role", userInfo.RoleId.ToString()),
-                new Claim(ClaimTypes.Role, userInfo.RoleId.ToString())
+                new Claim("Role", userInfo.RoleName.ToString()),
+                new Claim(ClaimTypes.Role, userInfo.RoleName.ToString())
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],

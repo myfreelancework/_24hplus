@@ -122,5 +122,33 @@ namespace _24hplusdotnetcore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError ,new ResponseMessage{status = "ERROR", message = ex.Message});
             }
         }
+        [HttpPost]
+        [Route("api/userrole/create")]
+        public ActionResult<UserRole> Create(UserRole userRole)
+        {
+            try
+            {
+                var newUserRole = _userRoleServices.CreateUserRole(userRole);
+
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = newUserRole
+                });
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace _24hplusdotnetcore.Models
         [BsonRequired]
         public string UserName { get; set; }
         [BsonRequired]
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string CMND_CCCD_CMQD { get; set; }
         public string HocVan { get; set; }
         public string NoiCapCMND_CCCD { get; set; }

@@ -9,7 +9,7 @@ namespace _24hplusdotnetcore.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string UserName { get; set; }
-        public string RoleId { get; set; }
+        public string RoleName { get; set; }
         public string TeamLead { get; set; }
         public string AdminCoordinator { get; set; }
     }

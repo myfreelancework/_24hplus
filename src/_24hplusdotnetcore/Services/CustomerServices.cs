@@ -99,5 +99,27 @@ namespace _24hplusdotnetcore.Services
             }
             return DeleteCount;
         }
+        public StatusCount GetStatusCount (string userName)
+        {
+            var statusCount = new StatusCount();
+            try
+            {
+                var lstCustomer = _customer.Find(c => c.UserName == userName).ToList();
+                if (lstCustomer != null && lstCustomer.Count > 0)
+                {
+                    var statusdraft = lstCustomer.FindAll(l => l.Status == CustomerStatus.DRAFT).Count;
+                    var statusreturn = lstCustomer.FindAll(l => l.Status == CustomerStatus.RETURN).Count;
+                    var all = lstCustomer.Count;
+                    statusCount.StatusDraft = statusdraft;
+                    statusCount.StatusReturn = statusreturn;
+                    statusCount.All = all;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return statusCount;
+        }
     }
 }

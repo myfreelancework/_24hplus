@@ -69,5 +69,18 @@ namespace _24hplusdotnetcore.Services
             }
             return lstUserRole;
         }
+        public UserRole CreateUserRole(UserRole userRole)
+        {
+            try
+            {
+                _userRole.InsertOne(userRole);
+                return userRole;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
     }
 }

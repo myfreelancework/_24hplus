@@ -1,8 +1,9 @@
 ﻿namespace _24hplusdotnetcore.Common
 {
-    public enum CustomerStatus
+    public static class CustomerStatus
     {
-        DRAFT,
-        DONE
+        public static string DRAFT = "DRAFT";
+        public static string RETURN = "RETURN";
+        public static string ALL = "ALL";
     }
 }

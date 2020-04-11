@@ -35,24 +35,25 @@ namespace _24hplusdotnetcore.Services
                 return roleModel;
             }
         }
-        public Roles Update(string Id ,Roles role)
+        public long Update(Roles role)
         {
+            long countUpdate = 0;
             try
             {
-                _role.ReplaceOne(r => r.Id == Id, role);
-                return role;
+                countUpdate = _role.ReplaceOne(r => r.Id == role.Id, role).ModifiedCount;
             }
             catch (Exception ex)
             {
+                countUpdate = -1;
                  _logger.LogError(ex, ex.Message);
-                return role;
             }
+            return countUpdate;
         }
         public List<Roles> Get()
         {
             List<Roles> lstRoles = new List<Roles>();
             try
-            {
+            {   
                 lstRoles = _role.Find(r => true).ToList();
                 return lstRoles;
             }
@@ -100,6 +101,7 @@ namespace _24hplusdotnetcore.Services
             }
             catch (System.Exception ex)
             { 
+                deleteCount=-1;
                 _logger.LogError(ex, ex.Message);
                 return deleteCount;
             }

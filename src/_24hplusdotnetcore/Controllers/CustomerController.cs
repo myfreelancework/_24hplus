@@ -209,5 +209,32 @@ namespace _24hplusdotnetcore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("api/customer/countstatus/{UserName}")]
+        public ActionResult<ResponseContext> CustomerSatusCount(string UserName)
+        {
+            try
+            {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var statusCount = _customerServices.GetStatusCount(UserName);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = statusCount
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
     }
 }

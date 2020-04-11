@@ -33,7 +33,7 @@ namespace _24hplusdotnetcore.Services
                 userModel.UserLastName = user.UserLastName;
                 userModel.UserEmail = user.UserEmail;
                 userModel.UserPassword = user.UserPassword;//cipher.Encrypt(user.UserPassword);
-                userModel.RoleId = user.RoleId;
+                userModel.RoleName = user.RoleName;
                 _user.InsertOne(userModel);
                 _logger.LogInformation("Create user successfully: "+ JsonConvert.SerializeObject(userModel) +"");
                 return userModel;
