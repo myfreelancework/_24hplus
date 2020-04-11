@@ -14,5 +14,6 @@
         public static string CustomerOverview = "CustomerOverview";
         internal static string LoaiCV = "LoaiHinhCongViec";
         internal static string MobileVersion = "MobileVersion";
+        internal static string Partner = "Partner";
     }
 }

@@ -45,6 +45,20 @@ namespace _24hplusdotnetcore.Services
             }
             return objProductCategory;
         }
+        public ProductCategory GetProductCategoryByPartner(string PartnertId)
+        {
+
+            var objProductCategory = new ProductCategory();
+            try
+            {
+                objProductCategory = _productCategory.Find(p => p.PartnertId == PartnertId).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return objProductCategory;
+        }
         public ProductCategory Create(ProductCategory productCategory)
         {
             try

@@ -11,6 +11,7 @@ namespace _24hplusdotnetcore.Models
         public string ProductCategoryId { get; set; }
         [BsonRequired]
         public string ProductCategoryName { get; set; }
+        public string PartnertId { get; set; }
         public string Note { get; set; }
     }
 }
