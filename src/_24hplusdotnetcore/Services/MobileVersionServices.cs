@@ -12,7 +12,7 @@ namespace _24hplusdotnetcore.Services
     {
         private readonly ILogger<MobileVersionServices> _logger;
         private readonly IMongoCollection<MobileVersion> _mobileVersion;
-        public MobileVersionServices(ILogger<MobileVersionServices> logger, MongoDbConnection connection)
+        public MobileVersionServices(ILogger<MobileVersionServices> logger, IMongoDbConnection connection)
         {
             _logger = logger;
             var client = new MongoClient(connection.ConnectionString);

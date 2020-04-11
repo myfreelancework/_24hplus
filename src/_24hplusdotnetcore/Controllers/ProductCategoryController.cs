@@ -24,7 +24,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpGet]
         [Route("api/productcategories")]
-        public ActionResult<List<ProductCategory>> Get()
+        public ActionResult<ResponseContext> Get()
         {
             var lstProductCategory = new List<ProductCategory>();
             try
@@ -46,8 +46,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/productcategory/{MaLoaiSanPham}")]
-        public ActionResult<ProductCategory> Get(string MaLoaiSanPham)
+        [Route("api/productcategory/{ProductCategoryId}")]
+        public ActionResult<ResponseContext> Get(string ProductCategoryId)
         {
             var objProductCategory = new ProductCategory();
             try
@@ -59,7 +59,7 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                objProductCategory = _productCategoryServices.GetProductCategory(MaLoaiSanPham);
+                objProductCategory = _productCategoryServices.GetProductCategory(ProductCategoryId);
                 return Ok(objProductCategory);
             }
             catch (Exception ex)
@@ -70,7 +70,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/productcategory")]
-        public ActionResult<ProductCategory> Create(ProductCategory productCategory)
+        public ActionResult<ResponseContext> Create(ProductCategory productCategory)
         {
             try
             {
