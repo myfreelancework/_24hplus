@@ -52,6 +52,8 @@ namespace _24hplusdotnetcore.Models
         public NguoiCCHangHoa_KHThuongXuyen NguoiCC2 { get; set; }
         public KyHopDongGiaiNgan KyHopDongGiaiNgan { get; set; }
         public ThongTinSale ThongTinSale { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 
     public class ThongTinSale

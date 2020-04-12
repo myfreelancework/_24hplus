@@ -16,5 +16,6 @@
         internal static string MobileVersion = "MobileVersion";
         internal static string Partner = "Partner";
         internal static string Product = "Product";
+        internal static string FileUpload = "FileUpload";
     }
 }
