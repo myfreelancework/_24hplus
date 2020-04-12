@@ -2,7 +2,7 @@
 {
     public static class MongoCollection
     {
-        public static string LoaiHoSo = "LoaiHoSo";
+        public static string LoaiHoSo = "DocumentCategory";
         public static string DemoCollection = "demo";
         public static string UsersCollection = "Users";
         public static string UserRoles = "UserRoles";
@@ -12,8 +12,9 @@
         public static string AuthRefresh = "AuthRefresh";
         public static string UserLogin = "UserLogin";
         public static string CustomerOverview = "CustomerOverview";
-        internal static string LoaiCV = "LoaiHinhCongViec";
+        internal static string LoaiCV = "JobCategory";
         internal static string MobileVersion = "MobileVersion";
         internal static string Partner = "Partner";
+        internal static string Product = "Product";
     }
 }

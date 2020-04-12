@@ -40,9 +40,11 @@ namespace _24hplusdotnetcore
             services.AddSingleton<AuthServices>();
             services.AddSingleton<AuthRefreshServices>();
             services.AddSingleton<UserLoginServices>();
-            services.AddSingleton<LoaiHoSoServices>();
+            services.AddSingleton<DocumentCategoryServices>();
             services.AddSingleton<UserRoleServices>();
             services.AddSingleton<MobileVersionServices>();
+            services.AddSingleton<LoaiCVServices>();
+            services.AddSingleton<ProductServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

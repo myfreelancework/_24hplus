@@ -7,18 +7,18 @@ namespace _24hplusdotnetcore.Services
 {
     public class LoaiCVServices
     {
-        private readonly ILogger<LoaiHoSoServices> _logger;
-        private readonly IMongoCollection<LoaiHinhCongViec> _loaiCV;
-        public LoaiCVServices(ILogger<LoaiHoSoServices> logger, IMongoDbConnection connection)
+        private readonly ILogger<DocumentCategoryServices> _logger;
+        private readonly IMongoCollection<JobCategory> _loaiCV;
+        public LoaiCVServices(ILogger<DocumentCategoryServices> logger, IMongoDbConnection connection)
         {
             _logger = logger;
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
-            _loaiCV = database.GetCollection<LoaiHinhCongViec>(Common.MongoCollection.LoaiCV);
+            _loaiCV = database.GetCollection<JobCategory>(Common.MongoCollection.LoaiCV);
         }
-        public List<LoaiHinhCongViec> GetList()
+        public List<JobCategory> GetList()
         {
-            var lstLoaiCV = new List<LoaiHinhCongViec>();
+            var lstLoaiCV = new List<JobCategory>();
             try
             {
                 lstLoaiCV = _loaiCV.Find(l => true).ToList();
@@ -29,18 +29,31 @@ namespace _24hplusdotnetcore.Services
             }
             return lstLoaiCV;
         }
-        public LoaiHinhCongViec GetLoaiHinhCongViec(string MaLoaiCV)
+        public JobCategory GetJobCategoryByCategoryId(string JobCategoryId)
         {
-            var objLoaiCV = new LoaiHinhCongViec();
+            var objLoaiCV = new JobCategory();
             try
             {
-                objLoaiCV = _loaiCV.Find(c => c.MaLoaiCV == MaLoaiCV).FirstOrDefault();
+                objLoaiCV = _loaiCV.Find(c => c.JobCategoryId == JobCategoryId).FirstOrDefault();
             }
             catch (System.Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
             return objLoaiCV;
+        }
+        public List<JobCategory> GetJobCategoryByPartnerId(string partnerId)
+        {
+            var lstLoaiCV = new List<JobCategory>();
+            try
+            {
+                lstLoaiCV = _loaiCV.Find(l => l.PartnerId == partnerId).ToList();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return lstLoaiCV;
         }
     }
 }
