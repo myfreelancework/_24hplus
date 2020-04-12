@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace _24hplusdotnetcore.Controllers
 {
@@ -173,7 +174,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/customer/delete")]
-        public ActionResult<ResponseContext> Delete(string MaKH)
+        public ActionResult<ResponseContext> Delete([FromBody] string[] MaKHArray)
         {
             try
             {
@@ -184,18 +185,14 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                long deleteCount = _customerServices.DeleteCustomer(MaKH);
+                long deleteCount = _customerServices.DeleteCustomer(MaKHArray);
                 if (deleteCount >= 0)
                 {
                     return Ok(new ResponseContext
                     {
                         code = (int)Common.ResponseCode.SUCCESS,
                         message = Common.Message.SUCCESS,
-                        data = new ResponseMessage
-                        {
-                            status = "Delete Successful",
-                            message = "MaKH: "+MaKH+" has been deleted"
-                        }
+                        data = JsonConvert.SerializeObject(""+ deleteCount + " have been deleted")
                     });
                 }
                 else

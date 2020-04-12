@@ -32,12 +32,26 @@ namespace _24hplusdotnetcore.Services
             }
             return lstProductCategories;
         }
-        public ProductCategory GetProductCategory(string MaLoaiSanPham)
+        public ProductCategory GetProductCategory(string ProductCategoryId)
         {
             var objProductCategory = new ProductCategory();
             try
             {
-                objProductCategory = _productCategory.Find(p => p.MaLoaiSanPham == MaLoaiSanPham).FirstOrDefault();
+                objProductCategory = _productCategory.Find(p => p.ProductCategoryId == ProductCategoryId).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return objProductCategory;
+        }
+        public ProductCategory GetProductCategoryByPartner(string PartnertId)
+        {
+
+            var objProductCategory = new ProductCategory();
+            try
+            {
+                objProductCategory = _productCategory.Find(p => p.PartnertId == PartnertId).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -63,7 +77,7 @@ namespace _24hplusdotnetcore.Services
             long updateCount = 0;
             try
             {
-                updateCount = _productCategory.ReplaceOne(r => r.MaLoaiSanPham == productCategory.MaLoaiSanPham, productCategory).ModifiedCount;
+                updateCount = _productCategory.ReplaceOne(r => r.Id == productCategory.Id, productCategory).ModifiedCount;
             }
             catch (Exception ex) 
             {
@@ -71,12 +85,12 @@ namespace _24hplusdotnetcore.Services
             }
             return updateCount;
         }
-        public long Detete(string MaLoaiSanPham)
+        public long Detete(string Id)
         {
             long deleteCount = 0;
             try
             {
-                deleteCount = _productCategory.DeleteOne(p => p.MaLoaiSanPham == MaLoaiSanPham).DeletedCount;
+                deleteCount = _productCategory.DeleteOne(p => p.Id == Id).DeletedCount;
             }
             catch (Exception ex)
             {

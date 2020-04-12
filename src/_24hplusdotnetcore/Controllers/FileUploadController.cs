@@ -1,26 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
-    public class JobCategoryController : ControllerBase
+    public class FileUploadController : ControllerBase
     {
-        private readonly ILogger<JobCategoryController> _logger;
-        private readonly LoaiCVServices _loaiCVServices;
-        public JobCategoryController(ILogger<JobCategoryController> logger, LoaiCVServices loaiCVServices)
+        private readonly ILogger<FileUploadController> _logger;
+        private readonly FileUploadServices _fileUploadServices;
+        public FileUploadController(ILogger<FileUploadController> logger, FileUploadServices fileUploadServices)
         {
             _logger = logger;
-            _loaiCVServices = loaiCVServices;
+            _fileUploadServices = fileUploadServices;
         }
         [HttpGet]
-        [Route("api/jobcategories")]
-        public ActionResult<ResponseContext> GetList()
+        [Route("api/fileuploads/{MaKH}")]
+        public ActionResult<ResponseContext> GetFileUploadsByMaKH(string MaKH)
+        {
+            try
+            {
+
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var lstFileUpload = new List<FileUpload>();
+                lstFileUpload = _fileUploadServices.GetListFileUploadByMaKH(MaKH);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstFileUpload
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage
+                {
+                    status = "ERROR",
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        [Route("api/fileupload/create")]
+        public ActionResult<ResponseContext> Create(FileUpload fileUpload)
         {
             try
             {
@@ -31,13 +68,44 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var lstLoaicv = new List<JobCategory>();
-                lstLoaicv = _loaiCVServices.GetList();
+                var newFileUpload = _fileUploadServices.CreateFileUpload(fileUpload);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstLoaicv
+                    data = newFileUpload
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage
+                {
+                    status = "ERROR",
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        [Route("api/fileupload/update")]
+        public ActionResult<ResponseContext> Update([FromBody] FileUpload[] fileUploads)
+        {
+            try
+            {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var updateCount = _fileUploadServices.UpdateFileUpLoad(fileUploads);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = JsonConvert.SerializeObject(""+ updateCount + " records have been updated")
                 });
             }
             catch (Exception ex)
@@ -50,9 +118,9 @@ namespace _24hplusdotnetcore.Controllers
                 });
             }
         }
-        [HttpGet]
-        [Route("api/jobcategory/{JobCategoryId}")]
-        public ActionResult<ResponseContext> GetLoaiCV(string JobCategoryId)
+        [HttpPost]
+        [Route("api/fileupload/delete")]
+        public ActionResult<ResponseContext> FileUploadDelete([FromBody] string[] FileUploadId)
         {
             try
             {
@@ -63,45 +131,12 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var objLoaiCV = new JobCategory();
-                objLoaiCV = _loaiCVServices.GetJobCategoryByCategoryId(JobCategoryId);
+                var deleteCount = _fileUploadServices.DeleteFileUpload(FileUploadId);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = objLoaiCV
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage
-                {
-                    status = "ERROR",
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpGet]
-        [Route("api/jobcategory/partner/{PartnerId}")]
-        public ActionResult<ResponseContext> GetJobCategoryByPartnerId(string PartnerId)
-        {
-            try
-            {
-                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
-                    return Ok(new ResponseContext
-                    {
-                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
-                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
-                        data = null
-                    });
-                var lstLoaiCV = new List<JobCategory>();
-                lstLoaiCV = _loaiCVServices.GetJobCategoryByPartnerId(PartnerId);
-                return Ok(new ResponseContext
-                {
-                    code = (int)Common.ResponseCode.SUCCESS,
-                    message = Common.Message.SUCCESS,
-                    data = lstLoaiCV
+                    data = JsonConvert.SerializeObject("" + deleteCount + " records have been delete")
                 });
             }
             catch (Exception ex)

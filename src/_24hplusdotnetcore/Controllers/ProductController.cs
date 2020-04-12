@@ -1,4 +1,7 @@
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Http;
@@ -8,18 +11,18 @@ using Microsoft.Extensions.Logging;
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
-    public class DocumentCategoryController: ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly ILogger<DocumentCategoryController> _logger;
-        private readonly Services.DocumentCategoryServices _loaiHSServices;
-        public DocumentCategoryController(ILogger<DocumentCategoryController> logger, Services.DocumentCategoryServices loaiHS)
+        private readonly ILogger<ProductController> _logger;
+        private readonly ProductServices _productServices;
+        public ProductController(ILogger<ProductController> logger, ProductServices productServices)
         {
-            _loaiHSServices = loaiHS;
             _logger = logger;
+            _productServices = productServices;
         }
         [HttpGet]
-        [Route("api/documentcategories")]
-        public ActionResult<ResponseContext> GetList()
+        [Route("api/products/{PartnerId}")]
+        public ActionResult<ResponseContext> GetListProductByPartnerId(string PartnerId)
         {
             try
             {
@@ -30,83 +33,74 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var lstLoaiHS = new List<Models.DocumentCategory>();
-                lstLoaiHS = _loaiHSServices.GetList();
-                return Ok(new ResponseContext{
-                    code = (int)Common.ResponseCode.SUCCESS,
-                    message = Common.Message.SUCCESS,
-                    data = lstLoaiHS
-                });
-            }
-            catch (System.Exception ex)
-            {
-               _logger.LogError(ex, ex.Message);
-               return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage{
-                   status = "ERROR",
-                   message = ex.Message
-               });
-            }
-        }
-        [HttpGet]
-        [Route("api/documentcategory/{DocumentCategoryId}")]
-        public ActionResult<ResponseContext> GetLoaiHSByMaLoaiHS( string DocumentCategoryId)
-        {
-            try
-            {
-                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
-                    return Ok(new ResponseContext
-                    {
-                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
-                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
-                        data = null
-                    });
-                var objLoaiHS = new Models.DocumentCategory();
-                objLoaiHS = _loaiHSServices.GetDocumentCategory(DocumentCategoryId);
-                return Ok(new ResponseContext{
-                    code = (int)Common.ResponseCode.SUCCESS,
-                    message = Common.Message.SUCCESS,
-                    data = objLoaiHS
-                });
-            }
-            catch (System.Exception ex)
-            {
-               _logger.LogError(ex, ex.Message);
-               return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage{
-                   status = "ERROR",
-                   message = ex.Message
-               });
-            }
-        }
-        [HttpGet]
-        [Route("api/documentcategory/partner/{PartnerId}")]
-        public ActionResult<ResponseContext> GetDocumentCategoryByPartner(string PartnerId)
-        {
-            try
-            {
-                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
-                    return Ok(new ResponseContext
-                    {
-                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
-                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
-                        data = null
-                    });
-                var lstLoaiHS = new List<DocumentCategory>();
-                lstLoaiHS = _loaiHSServices.GetDocumentCategoryByPartnerId(PartnerId);
+                var lstProduct = new List<Product>();
+                lstProduct = _productServices.GetProductByPartner(PartnerId);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstLoaiHS
+                    data = lstProduct
                 });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("api/product/{productid}")]
+        public ActionResult<ResponseContext> GetProductByProductId(string productid)
+        {
+            try
+            {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var objProduct = new Product();
+                objProduct = _productServices.GetProductByProductId(productid);
+                return Ok(new ResponseContext
                 {
-                    status = "ERROR",
-                    message = ex.Message
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = objProduct
                 });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("api/product/create")]
+        public ActionResult<ResponseContext> Create(Product product)
+        {
+            try
+            {
+                if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var newProduct = _productServices.CreateProduct(product);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = newProduct
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
             }
         }
     }

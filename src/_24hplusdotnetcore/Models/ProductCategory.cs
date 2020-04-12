@@ -7,9 +7,11 @@ namespace _24hplusdotnetcore.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string MaLoaiSanPham { get; set; }
+        public string Id { get; set; }
+        public string ProductCategoryId { get; set; }
         [BsonRequired]
-        public string TenLoaiSanPham { get; set; }
-        public string GhiChuLoaiSanPhan { get; set; }
+        public string ProductCategoryName { get; set; }
+        public string PartnertId { get; set; }
+        public string Note { get; set; }
     }
 }

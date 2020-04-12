@@ -13,6 +13,8 @@ namespace _24hplusdotnetcore.Models
         public string UserName { get; set; }
         [BsonRequired]
         public string Status { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
         public Personal Personal { get; set; }
         public Address ResidentAddress { get; set; }
