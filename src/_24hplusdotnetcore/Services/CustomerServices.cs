@@ -85,12 +85,15 @@ namespace _24hplusdotnetcore.Services
             }
             return updateCount;
         }
-        public long DeleteCustomer(string MaKH)
+        public long DeleteCustomer(string[] MaKHArray)
         {
             long DeleteCount = 0;
             try
             {
-                DeleteCount = _customer.DeleteOne(c => c.MaKH == MaKH).DeletedCount;
+                for (int i = 0; i < MaKHArray.Length; i++)
+                {
+                    DeleteCount += _customer.DeleteOne(c => c.MaKH == MaKHArray[i] && c.Status == Common.CustomerStatus.DRAFT).DeletedCount;
+                }                
             }
             catch (Exception ex)
             {
