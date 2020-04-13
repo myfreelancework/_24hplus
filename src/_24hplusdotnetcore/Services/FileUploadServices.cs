@@ -18,12 +18,12 @@ namespace _24hplusdotnetcore.Services
             var database = client.GetDatabase(connection.DataBase);
             _fileUpload = database.GetCollection<FileUpload>(Common.MongoCollection.FileUpload);
         }
-        public List<FileUpload> GetListFileUploadByMaKH(string MaKH)
+        public List<FileUpload> GetListFileUploadByCustomerId(string CustomerId)
         {
             var lstFileUpload = new List<FileUpload>();
             try
             {
-                lstFileUpload = _fileUpload.Find(f => f.MaKH == MaKH).ToList();
+                lstFileUpload = _fileUpload.Find(f => f.CustomerId == CustomerId).ToList();
             }
             catch (Exception ex)
             {

@@ -22,8 +22,8 @@ namespace _24hplusdotnetcore.Controllers
             _fileUploadServices = fileUploadServices;
         }
         [HttpGet]
-        [Route("api/fileuploads/{MaKH}")]
-        public ActionResult<ResponseContext> GetFileUploadsByMaKH(string MaKH)
+        [Route("api/fileuploads/{CustomerId}")]
+        public ActionResult<ResponseContext> GetFileUploadsById(string CustomerId)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstFileUpload = new List<FileUpload>();
-                lstFileUpload = _fileUploadServices.GetListFileUploadByMaKH(MaKH);
+                lstFileUpload = _fileUploadServices.GetListFileUploadByCustomerId(CustomerId);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
