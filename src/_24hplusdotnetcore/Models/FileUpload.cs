@@ -9,6 +9,6 @@ namespace _24hplusdotnetcore.Models
         public string FileUploadId { get; set; }
         public string FileUploadName { get; set; }
         public string FileUploadURL { get; set; }
-        public string MaKH { get; set; }
+        public string CustomerId { get; set; }
     }
 }
