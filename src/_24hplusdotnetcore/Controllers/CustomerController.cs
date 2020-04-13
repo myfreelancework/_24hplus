@@ -25,7 +25,7 @@ namespace _24hplusdotnetcore.Controllers
         
         [HttpGet]
         [Route("api/customers")]
-        public ActionResult<ResponseContext> GetCustomerList()
+        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username, [FromQuery] string greentype)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstCustomers = new List<Customer>();
-                lstCustomers = _customerServices.GetList();
+                lstCustomers = _customerServices.GetList(greentype, username);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
@@ -207,8 +207,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/customer/countstatus/{UserName}")]
-        public ActionResult<ResponseContext> CustomerSatusCount(string UserName)
+        [Route("api/customer/countstatus")]
+        public ActionResult<ResponseContext> CustomerSatusCount([FromQuery]string username, [FromQuery]string greentype)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var statusCount = _customerServices.GetStatusCount(UserName);
+                var statusCount = _customerServices.GetStatusCount(username, greentype);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,

@@ -18,12 +18,12 @@ namespace _24hplusdotnetcore.Services
             _customer = database.GetCollection<Customer>(MongoCollection.CustomerCollection);
             _logger = logger;
         }
-        public List<Customer> GetList()
+        public List<Customer> GetList(string GreenType, string UserName)
         {
             var lstCustomer = new List<Customer>();
             try
             {
-                lstCustomer = _customer.Find(c => true).ToList();
+                lstCustomer = _customer.Find(c => c.GreenType == GreenType && c.UserName == UserName).ToList();
 
             }
             catch (Exception ex)
@@ -102,19 +102,19 @@ namespace _24hplusdotnetcore.Services
             }
             return DeleteCount;
         }
-        public StatusCount GetStatusCount (string userName)
+        public StatusCount GetStatusCount (string userName, string GreenType)
         {
             var statusCount = new StatusCount();
             try
             {
-                var lstCustomer = _customer.Find(c => c.UserName == userName).ToList();
+                var lstCustomer = _customer.Find(c => c.UserName == userName && c.GreenType == GreenType).ToList();
                 if (lstCustomer != null && lstCustomer.Count > 0)
                 {
                     var statusdraft = lstCustomer.FindAll(l => l.Status == CustomerStatus.DRAFT).Count;
                     var statusreturn = lstCustomer.FindAll(l => l.Status == CustomerStatus.RETURN).Count;
                     var all = lstCustomer.Count;
-                    statusCount.StatusDraft = statusdraft;
-                    statusCount.StatusReturn = statusreturn;
+                    statusCount.Draft = statusdraft;
+                    statusCount.Return = statusreturn;
                     statusCount.All = all;
                 }
             }

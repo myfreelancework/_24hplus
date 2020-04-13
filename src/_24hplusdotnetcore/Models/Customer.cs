@@ -13,6 +13,7 @@ namespace _24hplusdotnetcore.Models
         public string UserName { get; set; }
         [BsonRequired]
         public string Status { get; set; }
+        public string GreenType { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 

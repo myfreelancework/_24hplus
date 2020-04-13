@@ -2,8 +2,8 @@
 {
     public class StatusCount
     {
-        public int StatusDraft { get; set; }
-        public int StatusReturn { get; set; }
+        public int Draft { get; set; }
+        public int Return { get; set; }
         public int All { get; set; }
     }
 }
