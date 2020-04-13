@@ -52,8 +52,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/customer/{MaKH}")]
-        public ActionResult<ResponseContext> GetCustomer(string MaKH)
+        [Route("api/customer/{Id}")]
+        public ActionResult<ResponseContext> GetCustomer(string Id)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var objCustomer = new Customer();
-                objCustomer = _customerServices.GetCustomer(MaKH);
+                objCustomer = _customerServices.GetCustomer(Id);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
@@ -174,7 +174,7 @@ namespace _24hplusdotnetcore.Controllers
         }
         [HttpPost]
         [Route("api/customer/delete")]
-        public ActionResult<ResponseContext> Delete([FromBody] string[] MaKHArray)
+        public ActionResult<ResponseContext> Delete([FromBody] string[] IdArray)
         {
             try
             {
@@ -185,7 +185,7 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                long deleteCount = _customerServices.DeleteCustomer(MaKHArray);
+                long deleteCount = _customerServices.DeleteCustomer(IdArray);
                 if (deleteCount >= 0)
                 {
                     return Ok(new ResponseContext

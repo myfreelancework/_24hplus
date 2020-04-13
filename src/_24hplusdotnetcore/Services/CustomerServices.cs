@@ -32,12 +32,12 @@ namespace _24hplusdotnetcore.Services
             }
             return lstCustomer;
         }
-        public Customer GetCustomer(string MaKH)
+        public Customer GetCustomer(string Id)
         {
             var objCustomer = new Customer();
             try
             {
-                objCustomer = _customer.Find(c => c.MaKH == MaKH).FirstOrDefault();
+                objCustomer = _customer.Find(c => c.Id == Id).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace _24hplusdotnetcore.Services
             long updateCount = 0;
             try
             {
-                updateCount = _customer.ReplaceOne(c => c.MaKH == customer.MaKH, customer).ModifiedCount;
+                updateCount = _customer.ReplaceOne(c => c.Id == customer.Id, customer).ModifiedCount;
             }
             catch (Exception ex)
             {
@@ -85,14 +85,14 @@ namespace _24hplusdotnetcore.Services
             }
             return updateCount;
         }
-        public long DeleteCustomer(string[] MaKHArray)
+        public long DeleteCustomer(string[] Ids)
         {
             long DeleteCount = 0;
             try
             {
-                for (int i = 0; i < MaKHArray.Length; i++)
+                for (int i = 0; i < Ids.Length; i++)
                 {
-                    DeleteCount += _customer.DeleteOne(c => c.MaKH == MaKHArray[i] && c.Status == Common.CustomerStatus.DRAFT).DeletedCount;
+                    DeleteCount += _customer.DeleteOne(c => c.Id == Ids[i] && c.Status == Common.CustomerStatus.DRAFT).DeletedCount;
                 }                
             }
             catch (Exception ex)
