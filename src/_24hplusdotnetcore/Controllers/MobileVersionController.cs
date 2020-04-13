@@ -20,13 +20,13 @@ namespace _24hplusdotnetcore.Controllers
             _logger = logger;
             _mobileVersionServices = mobileVersionServices;
         }
-       [HttpPost]
+       [HttpGet]
        [Route("api/checkversion")]
-       public ActionResult<ResponseContext> CheckVersion(MobileVersion mobileVersion)
+       public ActionResult<ResponseContext> CheckVersion([FromQuery]string type, [FromQuery]string version)
         {
             try
             {
-                var currentVersion = _mobileVersionServices.GetMobileVersion(mobileVersion);
+                var currentVersion = _mobileVersionServices.GetMobileVersion(type, version);
                 if (currentVersion != null)
                 {
                     return Ok(new ResponseContext

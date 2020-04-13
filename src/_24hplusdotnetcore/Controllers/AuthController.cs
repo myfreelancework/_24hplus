@@ -133,10 +133,11 @@ namespace _24hplusdotnetcore.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, new ResponseMessage
+                    return StatusCode(StatusCodes.Status401Unauthorized, new ResponseContext
                     {
-                        status = "Login failed",
-                        message = "Username or Password is incorrect"
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = "Username or password is incorrect",
+                        data = null
                     });
                 }
 

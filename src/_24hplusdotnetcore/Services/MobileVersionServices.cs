@@ -45,12 +45,12 @@ namespace _24hplusdotnetcore.Services
             }
             return lstMobileVersion;
         }
-        public MobileVersion GetMobileVersion(MobileVersion mobileVersion)
+        public MobileVersion GetMobileVersion(string type, string version)
         {
             var objMobileVersion = new MobileVersion();
             try
             {
-                objMobileVersion = _mobileVersion.Find(m => m.Type.ToLower() == mobileVersion.Type.ToLower() && m.Version == mobileVersion.Version).FirstOrDefault();
+                objMobileVersion = _mobileVersion.Find(m => m.Type.ToLower() == type.ToLower() && m.Version == version).FirstOrDefault();
             }
             catch (Exception ex)
             {
