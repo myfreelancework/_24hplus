@@ -33,7 +33,7 @@ namespace _24hplusdotnetcore.Models
         // public HopDongBHNT HopDongBHNT { get; set; }
 
         public Disburement Disburement { get; set; }
-        public SaleInfo SaleInfo { get; set; }
+        public Sale SaleInfo { get; set; }
     }
 
     public class Personal {
