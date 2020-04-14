@@ -44,12 +44,12 @@ namespace _24hplusdotnetcore.Services
             }
             return objProduct;
         }
-        public List<Product> GetProductByPartner(string PartnerId)
+        public List<Product> GetProductBygreen(string GreenType)
         {
             var lstProduct = new List<Product>();
             try
             {
-                lstProduct = _product.Find(p => p.PartnerId == PartnerId).ToList();
+                lstProduct = _product.Find(p => p.GreenType == GreenType).ToList();
             }
             catch (Exception ex)
             {

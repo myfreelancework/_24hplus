@@ -45,19 +45,19 @@ namespace _24hplusdotnetcore.Services
             }
             return objProductCategory;
         }
-        public ProductCategory GetProductCategoryByPartner(string PartnertId)
+        public List<ProductCategory> GetProductCategoryBygreen(string greentId)
         {
 
-            var objProductCategory = new ProductCategory();
+            var lstProductCategory = new List<ProductCategory>();
             try
             {
-                objProductCategory = _productCategory.Find(p => p.PartnertId == PartnertId).FirstOrDefault();
+                lstProductCategory = _productCategory.Find(p => p.greentId == greentId).ToList();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            return objProductCategory;
+            return lstProductCategory;
         }
         public ProductCategory Create(ProductCategory productCategory)
         {

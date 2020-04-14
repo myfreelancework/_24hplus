@@ -21,8 +21,8 @@ namespace _24hplusdotnetcore.Controllers
             _productServices = productServices;
         }
         [HttpGet]
-        [Route("api/products/{PartnerId}")]
-        public ActionResult<ResponseContext> GetListProductByPartnerId(string PartnerId)
+        [Route("api/products")]
+        public ActionResult<ResponseContext> GetListProductByGreenType([FromQuery]string greentype)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstProduct = new List<Product>();
-                lstProduct = _productServices.GetProductByPartner(PartnerId);
+                lstProduct = _productServices.GetProductBygreen(greentype);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,

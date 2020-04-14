@@ -8,49 +8,49 @@ using System.Threading.Tasks;
 
 namespace _24hplusdotnetcore.Services
 {
-    public class PartnerServices
+    public class GreenServices
     {
-        private readonly ILogger<PartnerServices> _logger;
-        private readonly IMongoCollection<Partner> _partner;
-        public PartnerServices(ILogger<PartnerServices> logger, IMongoDbConnection connection)
+        private readonly ILogger<GreenServices> _logger;
+        private readonly IMongoCollection<Green> _green;
+        public GreenServices(ILogger<GreenServices> logger, IMongoDbConnection connection)
         {
             _logger = logger;
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
-            _partner = database.GetCollection<Partner>(Common.MongoCollection.Partner);
+            _green = database.GetCollection<Green>(Common.MongoCollection.Green);
         }
-        public List<Partner> GetPartners()
+        public List<Green> Getgreens()
         {
-            var lstPartner = new List<Partner>();
+            var lstgreen = new List<Green>();
             try
             {
-                lstPartner = _partner.Find(p => true).ToList();
+                lstgreen = _green.Find(p => true).ToList();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            return lstPartner;
+            return lstgreen;
         }
-        public Partner GetPartner(string PartnerId)
+        public Green Getgreen(string GreenType)
         {
-            var objPartner = new Partner();
+            var objgreen = new Green();
             try
             {
-                objPartner = _partner.Find(p => p.PartnerId == PartnerId).FirstOrDefault();
+                objgreen = _green.Find(p => p.GreenType == GreenType).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            return objPartner;
+            return objgreen;
         }
-        public Partner Create(Partner partner)
+        public Green Create(Green green)
         {
             try
             {
-                _partner.InsertOne(partner);
-                return partner;
+                _green.InsertOne(green);
+                return green;
             }
             catch (Exception ex)
             {

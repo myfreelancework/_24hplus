@@ -15,6 +15,6 @@ namespace _24hplusdotnetcore.Models
         public string InterestRateByYear{ get; set; }
         public string[] DocumentRequired { get; set; }
         public string[] OtherDocument { get; set; }
-        public string PartnerId { get; set; }
+        public string GreenType { get; set; }
     }
 }

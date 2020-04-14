@@ -11,6 +11,6 @@ namespace _24hplusdotnetcore.Models
         [BsonRequired]
         public string DocumentCategoryId { get; set; }
         public string DocumentCategoryName { get; set; }
-        public string PartnerId { get; set; }
+        public string GreenType { get; set; }
     }
 }

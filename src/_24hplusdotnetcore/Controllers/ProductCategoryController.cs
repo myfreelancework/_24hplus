@@ -69,10 +69,10 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/productcategory/{PartnerId}")]
-        public ActionResult<ResponseContext> GetProdctCategoryByPartnerId(string PartnerId)
+        [Route("api/productcategory")]
+        public ActionResult<ResponseContext> GetProdctCategoryByGreenType([FromQuery]string greentype)
         {
-            var objProductCategory = new ProductCategory();
+            var lstProductCategory = new List<ProductCategory>();
             try
             {
                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
@@ -82,8 +82,8 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                objProductCategory = _productCategoryServices.GetProductCategoryByPartner(PartnerId);
-                return Ok(objProductCategory);
+                lstProductCategory = _productCategoryServices.GetProductCategoryBygreen(greentype);
+                return Ok(lstProductCategory);
             }
             catch (Exception ex)
             {

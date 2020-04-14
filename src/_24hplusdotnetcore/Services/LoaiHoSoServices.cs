@@ -44,12 +44,12 @@ namespace _24hplusdotnetcore.Services
             return objLoaiHoSo;
         }
 
-        internal List<DocumentCategory> GetDocumentCategoryByPartnerId(string partnertId)
+        internal List<DocumentCategory> GetDocumentCategoryByGreenType(string greentId)
         {
             var lstLoaiHoSo = new List<DocumentCategory>();
             try
             {
-                lstLoaiHoSo = _loaiHS.Find(h => h.PartnerId == partnertId).ToList();
+                lstLoaiHoSo = _loaiHS.Find(h => h.GreenType == greentId).ToList();
             }
             catch (System.Exception ex)
             {

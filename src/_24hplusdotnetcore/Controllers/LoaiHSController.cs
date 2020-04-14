@@ -78,8 +78,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/documentcategory/partner/{PartnerId}")]
-        public ActionResult<ResponseContext> GetDocumentCategoryByPartner(string PartnerId)
+        [Route("api/documentcategory/green")]
+        public ActionResult<ResponseContext> GetDocumentCategoryBygreen([FromQuery]string greentype)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstLoaiHS = new List<DocumentCategory>();
-                lstLoaiHS = _loaiHSServices.GetDocumentCategoryByPartnerId(PartnerId);
+                lstLoaiHS = _loaiHSServices.GetDocumentCategoryByGreenType(greentype);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,

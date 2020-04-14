@@ -11,6 +11,6 @@ namespace _24hplusdotnetcore.Models
         [BsonRequired]
         public string JobCategoryId { get; set; }
         public string JobCategoryName { get; set; }
-        public string PartnerId { get; set; }
+        public string GreenType { get; set; }
     }
 }

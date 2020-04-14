@@ -42,12 +42,12 @@ namespace _24hplusdotnetcore.Services
             }
             return objLoaiCV;
         }
-        public List<JobCategory> GetJobCategoryByPartnerId(string partnerId)
+        public List<JobCategory> GetJobCategoryByGreenType(string GreenType)
         {
             var lstLoaiCV = new List<JobCategory>();
             try
             {
-                lstLoaiCV = _loaiCV.Find(l => l.PartnerId == partnerId).ToList();
+                lstLoaiCV = _loaiCV.Find(l => l.GreenType == GreenType).ToList();
             }
             catch (System.Exception ex)
             {

@@ -83,10 +83,10 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/jobcategory/partner/{PartnerId}")]
-        public ActionResult<ResponseContext> GetJobCategoryByPartnerId(string PartnerId)
+        [Route("api/jobcategory/green")]
+        public ActionResult<ResponseContext> GetJobCategoryByGreenType([FromQuery] string greentype)
         {
-            try
+            try 
             {
                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
                     return Ok(new ResponseContext
@@ -96,7 +96,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstLoaiCV = new List<JobCategory>();
-                lstLoaiCV = _loaiCVServices.GetJobCategoryByPartnerId(PartnerId);
+                lstLoaiCV = _loaiCVServices.GetJobCategoryByGreenType(greentype);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,

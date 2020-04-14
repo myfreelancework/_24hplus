@@ -11,17 +11,17 @@ using Microsoft.Extensions.Logging;
 namespace _24hplusdotnetcore.Controllers
 {
     [ApiController]
-    public class PartnerController : ControllerBase
+    public class GreenController : ControllerBase
     {
-        private readonly ILogger<PartnerController> _logger;
-        private readonly PartnerServices _partnerServices;
-        public PartnerController(ILogger<PartnerController> logger, PartnerServices partnerServices)
+        private readonly ILogger<GreenController> _logger;
+        private readonly GreenServices _greenServices;
+        public GreenController(ILogger<GreenController> logger, GreenServices greenServices)
         {
             _logger = logger;
-            _partnerServices = partnerServices;
+            _greenServices = greenServices;
         }
         [HttpGet]
-        [Route("api/partners")]
+        [Route("api/greens")]
         public ActionResult<ResponseContext> Get()
         {
             try
@@ -33,13 +33,13 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var lstPartner = new List<Partner>();
-                lstPartner = _partnerServices.GetPartners();
+                var lstgreen = new List<Green>();
+                lstgreen = _greenServices.Getgreens();
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstPartner
+                    data = lstgreen
                 });
             }
             catch (Exception ex)
@@ -53,8 +53,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/partner/{PartnerId}")]
-        public ActionResult<Partner> GetPartnerByPartnerId(string PartnerId)
+        [Route("api/green/{GreenType}")]
+        public ActionResult<Green> GetgreenByGreenType(string GreenType)
         {
             try
             {
@@ -65,13 +65,13 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var objPartner = new Partner();
-                objPartner = _partnerServices.GetPartner(PartnerId);
+                var objgreen = new Green();
+                objgreen = _greenServices.Getgreen(GreenType);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = objPartner
+                    data = objgreen
                 });
             }
             catch (Exception ex)
@@ -85,8 +85,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpPost]
-        [Route("api/partner")]
-        public ActionResult<ResponseContext> Create(Partner partner)
+        [Route("api/green")]
+        public ActionResult<ResponseContext> Create(Green green)
         {
             try
             {
@@ -97,13 +97,13 @@ namespace _24hplusdotnetcore.Controllers
                         message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
                         data = null
                     });
-                var newPartner = new Partner();
-                newPartner = _partnerServices.Create(partner);
+                var newgreen = new Green();
+                newgreen = _greenServices.Create(green);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = newPartner
+                    data = newgreen
                 });
             }
             catch (Exception ex)

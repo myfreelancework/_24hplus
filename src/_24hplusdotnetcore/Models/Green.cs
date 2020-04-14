@@ -2,12 +2,12 @@
 
 namespace _24hplusdotnetcore.Models
 {
-    public class Partner
+    public class Green
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
-        public string PartnerId { get; set; }
-        public string PartnerName { get; set; }
+        public string GreenType { get; set; }
+        public string GreenName { get; set; }
     }
 }
