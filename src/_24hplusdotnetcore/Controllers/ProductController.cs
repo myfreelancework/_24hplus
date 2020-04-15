@@ -103,5 +103,33 @@ namespace _24hplusdotnetcore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("api/products/getproductbycategory")]
+        public ActionResult<ResponseContext> GetProductByProductCategory([FromQuery]string productcategoryid)
+        {
+            try
+            {
+                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
+                    return Ok(new ResponseContext
+                    {
+                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
+                        message = Common.Message.IS_LOGGED_IN_ORTHER_DEVICE,
+                        data = null
+                    });
+                var lstProduct = new List<Product>();
+                lstProduct = _productServices.GetProductByProductCategory(productcategoryid);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstProduct
+                });
+            }
+            catch (Exception ex)
+            {
+                 _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage { status = "ERROR", message = ex.Message });
+            }
+        }
     }
 }

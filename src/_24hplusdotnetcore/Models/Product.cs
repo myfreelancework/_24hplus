@@ -8,6 +8,7 @@ namespace _24hplusdotnetcore.Models
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
         public string ProductId { get; set; }
+        public string ProductCategoryId { get; set; }
         public string ProductName { get; set; }
         public string CustomAge { get; set; }
         public string Duration { get; set; }

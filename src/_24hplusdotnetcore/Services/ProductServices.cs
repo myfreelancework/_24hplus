@@ -70,5 +70,18 @@ namespace _24hplusdotnetcore.Services
                 return null;
             }
         }
+        public List<Product> GetProductByProductCategory(string ProductCategoryId)
+        {
+            var lstProduct = new List<Product>();
+            try
+            {
+                lstProduct = _product.Find(p => p.ProductCategoryId == ProductCategoryId).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return lstProduct;
+        }
     }
 }
