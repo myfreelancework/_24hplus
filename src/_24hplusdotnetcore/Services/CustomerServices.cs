@@ -1,6 +1,7 @@
 ﻿using _24hplusdotnetcore.Common;
 using _24hplusdotnetcore.Models;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,26 @@ namespace _24hplusdotnetcore.Services
             _customer = database.GetCollection<Customer>(MongoCollection.CustomerCollection);
             _logger = logger;
         }
-        public List<Customer> GetList(string GreenType, string UserName)
+        public List<Customer> GetList(string UserName, DateTime DateFrom, DateTime DateTo, string Status, int? pagenumber, int? pagesize)
         {
             var lstCustomer = new List<Customer>();
             try
             {
-                lstCustomer = _customer.Find(c => c.GreenType == GreenType && c.UserName == UserName).ToList();
+                int _pagesize = !pagesize.HasValue ? Common.Config.PageSize : (int)pagesize;
+
+                if (string.IsNullOrEmpty(Status))
+                {
+                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= DateFrom.AddHours(7) && c.CreatedDate <= DateTo.AddHours(7) && (c.Status.ToUpper() == Common.CustomerStatus.DRAFT || c.Status.ToUpper() == Common.CustomerStatus.RETURN))
+                        .SortBy(c => c.CreatedDate)
+                        .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                }
+                else
+                {
+                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= DateFrom.AddHours(7) && c.CreatedDate <= DateTo.AddHours(7) && (c.Status.ToUpper() == Status.ToUpper()))
+                        .SortBy(c => c.CreatedDate)
+                        .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                }
+
 
             }
             catch (Exception ex)
@@ -50,7 +65,7 @@ namespace _24hplusdotnetcore.Services
             var lstCustomer = new List<Customer>();
             try
             {
-                lstCustomer = _customer.Find(c => c.UserName == UserName).SortByDescending(c => c.ModifiedDate).Skip((pagenumber != null && pagenumber > 0)?((pagenumber -1)*2): 0).Limit(2).ToList();
+                lstCustomer = _customer.Find(c => c.UserName == UserName).SortByDescending(c => c.ModifiedDate).Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * Common.Config.PageSize) : 0).Limit(Common.Config.PageSize).ToList();
             }
             catch (Exception ex)
             {
@@ -93,7 +108,7 @@ namespace _24hplusdotnetcore.Services
                 for (int i = 0; i < Ids.Length; i++)
                 {
                     DeleteCount += _customer.DeleteOne(c => c.Id == Ids[i] && c.Status == Common.CustomerStatus.DRAFT).DeletedCount;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -102,7 +117,7 @@ namespace _24hplusdotnetcore.Services
             }
             return DeleteCount;
         }
-        public StatusCount GetStatusCount (string userName, string GreenType)
+        public StatusCount GetStatusCount(string userName, string GreenType)
         {
             var statusCount = new StatusCount();
             try
@@ -123,6 +138,22 @@ namespace _24hplusdotnetcore.Services
                 _logger.LogError(ex, ex.Message);
             }
             return statusCount;
+        }
+        internal long[] CustomerPagesize(List<Customer> lstCustomer)
+        {
+            long customersize = lstCustomer.Count;
+            if (customersize <= Common.Config.PageSize)
+            {
+                return new long[]{
+                    customersize,
+                    1
+                };
+            }
+            long totalpage = (customersize % Common.Config.PageSize) > 0 ? (customersize / Common.Config.PageSize + 1) : (customersize / Common.Config.PageSize + 1);
+            return new long[]{
+                customersize,
+                totalpage
+            };
         }
     }
 }

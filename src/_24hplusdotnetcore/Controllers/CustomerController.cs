@@ -25,7 +25,7 @@ namespace _24hplusdotnetcore.Controllers
         
         [HttpGet]
         [Route("api/customers")]
-        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username, [FromQuery] string greentype)
+        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username,[FromQuery] DateTime datefrom, [FromQuery] DateTime dateto,[FromQuery] string status, [FromQuery] int? pagenumber, [FromQuery] int? pagesize)
         {
             try
             {
@@ -37,12 +37,16 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstCustomers = new List<Customer>();
-                lstCustomers = _customerServices.GetList(greentype, username);
-                return Ok(new ResponseContext
+                lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, pagenumber,pagesize) ;
+                var datasizeInfo = _customerServices.CustomerPagesize(lstCustomers);
+                return Ok(new CustomerDataResponse
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstCustomers
+                    data = lstCustomers,
+                    pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
+                    totalrecord = datasizeInfo[0],
+                    totalpage = datasizeInfo[1]
                 });
             }
             catch (Exception ex)
@@ -99,7 +103,8 @@ namespace _24hplusdotnetcore.Controllers
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstCustomers
+                    data = lstCustomers,
+                    Paging = _customerServices.CustomerPagesize(lstCustomers)[1]
                 });
             }
             catch (Exception ex)

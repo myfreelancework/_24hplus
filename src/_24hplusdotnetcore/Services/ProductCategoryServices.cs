@@ -12,7 +12,7 @@ namespace _24hplusdotnetcore.Services
     {
         private readonly ILogger<ProductCategoryServices> _logger;
         private readonly IMongoCollection<ProductCategory> _productCategory;
-        ProductCategoryServices(ILogger<ProductCategoryServices> logger, IMongoDbConnection connection)
+        public ProductCategoryServices(ILogger<ProductCategoryServices> logger, IMongoDbConnection connection)
         {
             _logger = logger;
             var client = new MongoClient(connection.ConnectionString);
@@ -51,7 +51,7 @@ namespace _24hplusdotnetcore.Services
             var lstProductCategory = new List<ProductCategory>();
             try
             {
-                lstProductCategory = _productCategory.Find(p => p.greentId == greentId).ToList();
+                lstProductCategory = _productCategory.Find(p => p.GreenType == greentId).ToList();
             }
             catch (Exception ex)
             {
