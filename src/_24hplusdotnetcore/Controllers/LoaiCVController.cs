@@ -83,7 +83,7 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/jobcategory/green")]
+        [Route("api/jobcategory")]
         public ActionResult<ResponseContext> GetJobCategoryByGreenType([FromQuery] string greentype)
         {
             try 
