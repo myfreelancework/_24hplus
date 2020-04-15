@@ -81,8 +81,8 @@ namespace _24hplusdotnetcore.Controllers
             }
         }
         [HttpGet]
-        [Route("api/customer/getcustomerbyusername/{username}")]
-        public ActionResult<ResponseContext> GetCustomerByUserName(string username)
+        [Route("api/customer/getcustomerbyusername")]
+        public ActionResult<ResponseContext> GetCustomerByUserName([FromQuery]string username, [FromQuery] int? pagenumber) 
         {
             try
             {
@@ -94,7 +94,7 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstCustomers = new List<Customer>();
-                lstCustomers = _customerServices.GetCustomerByUserName(username);
+                lstCustomers = _customerServices.GetCustomerByUserName(username,pagenumber);
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,

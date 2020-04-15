@@ -45,12 +45,12 @@ namespace _24hplusdotnetcore.Services
             }
             return objCustomer;
         }
-        public List<Customer> GetCustomerByUserName(string UserName)
+        public List<Customer> GetCustomerByUserName(string UserName, int? pagenumber)
         {
             var lstCustomer = new List<Customer>();
             try
             {
-                lstCustomer = _customer.Find(c => c.UserName == UserName).ToList();
+                lstCustomer = _customer.Find(c => c.UserName == UserName).SortByDescending(c => c.ModifiedDate).Skip((pagenumber != null && pagenumber > 0)?((pagenumber -1)*2): 0).Limit(2).ToList();
             }
             catch (Exception ex)
             {
