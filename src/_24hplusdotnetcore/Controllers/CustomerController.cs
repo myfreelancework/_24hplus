@@ -25,7 +25,7 @@ namespace _24hplusdotnetcore.Controllers
         
         [HttpGet]
         [Route("api/customers")]
-        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username,[FromQuery] DateTime datefrom, [FromQuery] DateTime dateto,[FromQuery] string status, [FromQuery] int? pagenumber, [FromQuery] int? pagesize)
+        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username,[FromQuery] DateTime? datefrom, [FromQuery] DateTime? dateto,[FromQuery] string status, [FromQuery] int? pagenumber, [FromQuery] int? pagesize)
         {
             try
             {

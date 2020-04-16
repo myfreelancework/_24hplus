@@ -19,22 +19,24 @@ namespace _24hplusdotnetcore.Services
             _customer = database.GetCollection<Customer>(MongoCollection.CustomerCollection);
             _logger = logger;
         }
-        public List<Customer> GetList(string UserName, DateTime DateFrom, DateTime DateTo, string Status, int? pagenumber, int? pagesize)
+        public List<Customer> GetList(string UserName, DateTime? DateFrom, DateTime? DateTo, string Status, int? pagenumber, int? pagesize)
         {
             var lstCustomer = new List<Customer>();
+            DateTime _datefrom = DateFrom.HasValue ? Convert.ToDateTime(DateFrom) : new DateTime(0001, 01, 01);
+            DateTime _dateto = DateTo.HasValue ? Convert.ToDateTime(DateTo) : new DateTime(9999, 01, 01);
             try
             {
                 int _pagesize = !pagesize.HasValue ? Common.Config.PageSize : (int)pagesize;
 
                 if (string.IsNullOrEmpty(Status))
                 {
-                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= DateFrom.AddHours(7) && c.CreatedDate <= DateTo.AddHours(7) && (c.Status.ToUpper() == Common.CustomerStatus.DRAFT || c.Status.ToUpper() == Common.CustomerStatus.RETURN))
+                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= _datefrom && c.CreatedDate <= _dateto && (c.Status.ToUpper() == Common.CustomerStatus.DRAFT || c.Status.ToUpper() == Common.CustomerStatus.RETURN))
                         .SortBy(c => c.CreatedDate)
                         .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
                 }
                 else
                 {
-                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= DateFrom.AddHours(7) && c.CreatedDate <= DateTo.AddHours(7) && (c.Status.ToUpper() == Status.ToUpper()))
+                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= _datefrom && c.CreatedDate <= _dateto && (c.Status.ToUpper() == Status.ToUpper()))
                         .SortBy(c => c.CreatedDate)
                         .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
                 }
@@ -107,7 +109,7 @@ namespace _24hplusdotnetcore.Services
             {
                 for (int i = 0; i < Ids.Length; i++)
                 {
-                    DeleteCount += _customer.DeleteOne(c => c.Id == Ids[i] && c.Status == Common.CustomerStatus.DRAFT).DeletedCount;
+                    DeleteCount += _customer.DeleteOne(c => c.Id == Ids[i] && c.Status.ToUpper() == Common.CustomerStatus.DRAFT).DeletedCount;
                 }
             }
             catch (Exception ex)
@@ -125,8 +127,8 @@ namespace _24hplusdotnetcore.Services
                 var lstCustomer = _customer.Find(c => c.UserName == userName && c.GreenType == GreenType).ToList();
                 if (lstCustomer != null && lstCustomer.Count > 0)
                 {
-                    var statusdraft = lstCustomer.FindAll(l => l.Status == CustomerStatus.DRAFT).Count;
-                    var statusreturn = lstCustomer.FindAll(l => l.Status == CustomerStatus.RETURN).Count;
+                    var statusdraft = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.DRAFT).Count;
+                    var statusreturn = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.RETURN).Count;
                     var all = lstCustomer.Count;
                     statusCount.Draft = statusdraft;
                     statusCount.Return = statusreturn;
