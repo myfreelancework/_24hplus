@@ -25,7 +25,7 @@ namespace _24hplusdotnetcore.Controllers
         
         [HttpGet]
         [Route("api/customers")]
-        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username,[FromQuery] DateTime? datefrom, [FromQuery] DateTime? dateto,[FromQuery] string status, [FromQuery] int? pagenumber, [FromQuery] int? pagesize)
+        public ActionResult<ResponseContext> GetCustomerList([FromQuery] string username,[FromQuery] DateTime? datefrom, [FromQuery] DateTime? dateto,[FromQuery] string status, [FromQuery] string customername, [FromQuery] string greentype, [FromQuery] int? pagenumber, [FromQuery] int? pagesize)
         {
             try
             {
@@ -37,7 +37,8 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 var lstCustomers = new List<Customer>();
-                lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, pagenumber,pagesize) ;
+                int totalPage = 0;
+                lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, greentype, customername, pagenumber, pagesize, ref totalPage) ;
                 var datasizeInfo = _customerServices.CustomerPagesize(lstCustomers);
                 return Ok(new CustomerDataResponse
                 {
@@ -45,8 +46,7 @@ namespace _24hplusdotnetcore.Controllers
                     message = Common.Message.SUCCESS,
                     data = lstCustomers,
                     pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
-                    totalrecord = datasizeInfo[0],
-                    totalpage = datasizeInfo[1]
+                    totalpage = totalPage
                 });
             }
             catch (Exception ex)
@@ -103,8 +103,7 @@ namespace _24hplusdotnetcore.Controllers
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstCustomers,
-                    Paging = _customerServices.CustomerPagesize(lstCustomers)[1]
+                    data = lstCustomers
                 });
             }
             catch (Exception ex)

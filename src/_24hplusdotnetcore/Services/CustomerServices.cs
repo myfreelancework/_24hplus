@@ -19,7 +19,7 @@ namespace _24hplusdotnetcore.Services
             _customer = database.GetCollection<Customer>(MongoCollection.CustomerCollection);
             _logger = logger;
         }
-        public List<Customer> GetList(string UserName, DateTime? DateFrom, DateTime? DateTo, string Status, int? pagenumber, int? pagesize)
+        public List<Customer> GetList(string UserName, DateTime? DateFrom, DateTime? DateTo, string Status, string greentype,string customername, int? pagenumber, int? pagesize, ref int totalPage)
         {
             var lstCustomer = new List<Customer>();
             DateTime _datefrom = DateFrom.HasValue ? Convert.ToDateTime(DateFrom) : new DateTime(0001, 01, 01);
@@ -27,20 +27,42 @@ namespace _24hplusdotnetcore.Services
             try
             {
                 int _pagesize = !pagesize.HasValue ? Common.Config.PageSize : (int)pagesize;
-
-                if (string.IsNullOrEmpty(Status))
+                var filterUserName = Builders<Customer>.Filter.Eq(c => c.UserName, UserName);
+                var filterGreenType = Builders<Customer>.Filter.Eq(c => c.GreenType, greentype);
+                var filterCreateDate = Builders<Customer>.Filter.Gte(c => c.CreatedDate, _datefrom) & Builders<Customer>.Filter.Lte(c => c.CreatedDate, _dateto);
+                var filterStatus = Builders<Customer>.Filter.Eq(c => c.Status.ToUpper(), Status.ToUpper());
+                var filterCustomerName = Builders<Customer>.Filter.Regex(c => c.Personal.Name, ".*"+customername+".*");
+                filterUserName = filterUserName & filterCreateDate;
+                if (!string.IsNullOrEmpty(greentype))
                 {
-                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= _datefrom && c.CreatedDate <= _dateto && (c.Status.ToUpper() == Common.CustomerStatus.DRAFT || c.Status.ToUpper() == Common.CustomerStatus.RETURN))
-                        .SortBy(c => c.CreatedDate)
-                        .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                    filterUserName = filterUserName & filterGreenType;
+                }
+                if (!string.IsNullOrEmpty(Status))
+                {
+                    filterUserName = filterUserName & filterStatus;
+                }
+                if (!string.IsNullOrEmpty(customername))
+                {
+                    filterUserName = filterUserName & filterCustomerName;
+                }
+                var lstCount = _customer.Find(filterUserName).SortBy(c => c.CreatedDate).ToList().Count;
+                lstCustomer = _customer.Find(filterUserName).SortBy(c => c.CreatedDate)
+               .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                if (lstCount == 0)
+                {
+                    totalPage = 0;
                 }
                 else
                 {
-                    lstCustomer = _customer.Find(c => c.UserName == UserName && c.CreatedDate >= _datefrom && c.CreatedDate <= _dateto && (c.Status.ToUpper() == Status.ToUpper()))
-                        .SortBy(c => c.CreatedDate)
-                        .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                    if (lstCount <= _pagesize)
+                    {
+                        totalPage = 1;
+                    }
+                    else
+                    {
+                        totalPage = lstCount / _pagesize + lstCount % _pagesize;
+                    }
                 }
-
 
             }
             catch (Exception ex)

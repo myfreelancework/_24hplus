@@ -6,7 +6,6 @@ namespace _24hplusdotnetcore.Models
         public string  message { get; set; }
         public dynamic data { get; set; }
         public int pagenumber { get; set; }
-        public long totalrecord { get; set; }
         public long totalpage { get; set; }
     }
 }
