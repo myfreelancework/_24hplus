@@ -27,7 +27,7 @@ namespace _24hplusdotnetcore.Services
             try
             {
                 int _pagesize = !pagesize.HasValue ? Common.Config.PageSize : (int)pagesize;
-                var filterUserName = Builders<Customer>.Filter.Eq(c => c.UserName, UserName);
+                var filterUserName = Builders<Customer>.Filter.Regex(c => c.UserName, "/^" + UserName + "$/i");
                
                 var filterCreateDate = Builders<Customer>.Filter.Gte(c => c.CreatedDate, _datefrom) & Builders<Customer>.Filter.Lte(c => c.CreatedDate, _dateto);
                 filterUserName = filterUserName & filterCreateDate;
@@ -47,7 +47,7 @@ namespace _24hplusdotnetcore.Services
                     filterUserName = filterUserName & filterCustomerName;
                 }
                 var lstCount = _customer.Find(filterUserName).SortBy(c => c.CreatedDate).ToList().Count;
-                lstCustomer = _customer.Find(filterUserName).SortBy(c => c.CreatedDate)
+                lstCustomer = _customer.Find(filterUserName).SortByDescending(c => c.ModifiedDate)
                .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
                 totalrecord = lstCount;
                 if (lstCount == 0)
@@ -120,6 +120,7 @@ namespace _24hplusdotnetcore.Services
             try
             {
                 customer.ModifiedDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+                customer.CreatedDate = _customer.Find(c => c.Id == customer.Id).FirstOrDefault().CreatedDate;
                 updateCount = _customer.ReplaceOne(c => c.Id == customer.Id, customer).ModifiedCount;
             }
             catch (Exception ex)
