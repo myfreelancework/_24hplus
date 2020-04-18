@@ -45,12 +45,12 @@ namespace _24hplusdotnetcore.Controllers
                     }
                     else
                     {
-                        return StatusCode(StatusCodes.Status403Forbidden, new { message = "Cannot create refresh token!" });
+                        return StatusCode(StatusCodes.Status403Forbidden, new { message = Common.Message.LOGIN_BIDDEN });
                     }
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, new { message = "username or password is incorrect" });
+                    return StatusCode(StatusCodes.Status401Unauthorized, new { message = Common.Message.INCORRECT_USERNAME_PASSWORD });
                 }
             }
             catch (System.Exception ex)
@@ -135,8 +135,8 @@ namespace _24hplusdotnetcore.Controllers
                 {
                     return StatusCode(StatusCodes.Status401Unauthorized, new ResponseContext
                     {
-                        code = (int)Common.ResponseCode.IS_LOGGED_IN_ORTHER_DEVICE,
-                        message = "Username or password is incorrect",
+                        code = (int)Common.ResponseCode.ERROR,
+                        message = Common.Message.INCORRECT_USERNAME_PASSWORD,
                         data = null
                     });
                 }
