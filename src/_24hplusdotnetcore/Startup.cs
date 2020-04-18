@@ -46,6 +46,8 @@ namespace _24hplusdotnetcore
             services.AddSingleton<LoaiCVServices>();
             services.AddSingleton<ProductServices>();
             services.AddSingleton<FileUploadServices>();
+            services.AddSingleton<PaymentServices>();
+            services.AddSingleton<CheckInfoServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

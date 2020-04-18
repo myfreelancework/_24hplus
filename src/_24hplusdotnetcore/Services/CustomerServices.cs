@@ -28,21 +28,22 @@ namespace _24hplusdotnetcore.Services
             {
                 int _pagesize = !pagesize.HasValue ? Common.Config.PageSize : (int)pagesize;
                 var filterUserName = Builders<Customer>.Filter.Eq(c => c.UserName, UserName);
-                var filterGreenType = Builders<Customer>.Filter.Eq(c => c.GreenType, greentype);
+               
                 var filterCreateDate = Builders<Customer>.Filter.Gte(c => c.CreatedDate, _datefrom) & Builders<Customer>.Filter.Lte(c => c.CreatedDate, _dateto);
-                var filterStatus = Builders<Customer>.Filter.Eq(c => c.Status.ToUpper(), Status.ToUpper());
-                var filterCustomerName = Builders<Customer>.Filter.Regex(c => c.Personal.Name, ".*"+customername+".*");
                 filterUserName = filterUserName & filterCreateDate;
                 if (!string.IsNullOrEmpty(greentype))
                 {
+                    var filterGreenType = Builders<Customer>.Filter.Eq(c => c.GreenType, greentype);
                     filterUserName = filterUserName & filterGreenType;
                 }
                 if (!string.IsNullOrEmpty(Status))
                 {
+                    var filterStatus = Builders<Customer>.Filter.Regex(c => c.Status, "/^"+Status+"$/i");
                     filterUserName = filterUserName & filterStatus;
                 }
                 if (!string.IsNullOrEmpty(customername))
                 {
+                    var filterCustomerName = Builders<Customer>.Filter.Regex(c => c.Personal.Name, ".*" + customername + ".*");
                     filterUserName = filterUserName & filterCustomerName;
                 }
                 var lstCount = _customer.Find(filterUserName).SortBy(c => c.CreatedDate).ToList().Count;
@@ -101,6 +102,8 @@ namespace _24hplusdotnetcore.Services
         {
             try
             {
+                customer.CreatedDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
+                customer.ModifiedDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
                 _customer.InsertOne(customer);
                 return customer;
             }
@@ -115,6 +118,7 @@ namespace _24hplusdotnetcore.Services
             long updateCount = 0;
             try
             {
+                customer.ModifiedDate = Convert.ToDateTime(DateTime.Today.ToShortDateString());
                 updateCount = _customer.ReplaceOne(c => c.Id == customer.Id, customer).ModifiedCount;
             }
             catch (Exception ex)

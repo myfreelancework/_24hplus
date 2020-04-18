@@ -40,13 +40,13 @@ namespace _24hplusdotnetcore.Controllers
                 int totalPage = 0;
                 lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, greentype, customername, pagenumber, pagesize, ref totalPage) ;
                 var datasizeInfo = _customerServices.CustomerPagesize(lstCustomers);
-                return Ok(new CustomerDataResponse
+                return Ok(new PagingDataResponse
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
                     data = lstCustomers,
                     pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
-                    totalpage = totalPage
+                    totalpage = totalPage-1
                 });
             }
             catch (Exception ex)

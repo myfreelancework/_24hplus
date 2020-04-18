@@ -17,5 +17,6 @@
         internal static string Green = "Green";
         internal static string Product = "Product";
         internal static string FileUpload = "FileUpload";
+        internal static string Payment = "Payment";
     }
 }

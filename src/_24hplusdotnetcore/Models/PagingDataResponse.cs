@@ -1,6 +1,6 @@
 namespace _24hplusdotnetcore.Models
 {
-    public class CustomerDataResponse
+    public class PagingDataResponse
     {
         public int code { get; set; }
         public string  message { get; set; }
