@@ -155,9 +155,14 @@ namespace _24hplusdotnetcore.Services
                 {
                     var statusdraft = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.DRAFT).Count;
                     var statusreturn = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.RETURN).Count;
+                    var statussubmit = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.SUBMIT).Count;
+                    var statusreject = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.REJECT).Count;
+                    var statusapprove = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.APPROVE).Count;
                     var all = lstCustomer.Count;
                     statusCount.Draft = statusdraft;
                     statusCount.Return = statusreturn;
+                    statusCount.Submit = statussubmit;
+                    statusCount.Approve = statusapprove;
                     statusCount.All = all;
                 }
             }

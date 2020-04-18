@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using _24hplusdotnetcore.Models;
 using _24hplusdotnetcore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -39,12 +40,37 @@ namespace _24hplusdotnetcore.Controllers
                 var lstCustomers = new List<Customer>();
                 int totalPage = 0;
                 lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, greentype, customername, pagenumber, pagesize, ref totalPage) ;
+
+                var lstCustomerOptimization = new List<dynamic>();
+                
+                for (int i = 0; i < lstCustomers.Count; i++)
+                {
+                    dynamic item = new ExpandoObject();
+                    item.Id = lstCustomers[i].Id;
+                    item.ContractCode = lstCustomers[i].ContractCode;
+                    item.UserName = lstCustomers[i].UserName;
+                    item.Status = lstCustomers[i].Status;
+                    item.ModifiedDate = lstCustomers[i].ModifiedDate;
+                    dynamic Personal = new ExpandoObject();
+                    Personal.Name = lstCustomers[i].Personal.Name;
+                    Personal.IdCard = lstCustomers[i].Personal.IdCard;
+                    Personal.Phone = lstCustomers[i].Personal.Phone;
+                    item.Personal = Personal;
+                    dynamic Loan = new ExpandoObject();
+                    Loan.Name = lstCustomers[i].Loan!= null? lstCustomers[i].Loan.Name: null;
+                    item.Loan = Loan;
+                    dynamic Return = new ExpandoObject();
+                    Return.Status = lstCustomers[i].Return != null? lstCustomers[i].Return.Status : null;
+                    item.Return = Return;
+                    lstCustomerOptimization.Add(item);
+                }
+                
                 var datasizeInfo = _customerServices.CustomerPagesize(lstCustomers);
                 return Ok(new PagingDataResponse
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
                     message = Common.Message.SUCCESS,
-                    data = lstCustomers,
+                    data = lstCustomerOptimization,
                     pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
                     totalpage = totalPage
                 });
