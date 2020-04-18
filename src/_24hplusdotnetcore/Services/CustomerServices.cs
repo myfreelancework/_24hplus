@@ -61,7 +61,7 @@ namespace _24hplusdotnetcore.Services
                     }
                     else
                     {
-                        totalPage = lstCount / _pagesize + lstCount % _pagesize;
+                        totalPage = lstCount / _pagesize + ((lstCount % _pagesize) > 0? 1 : 0);
                     }
                 }
 

@@ -46,7 +46,7 @@ namespace _24hplusdotnetcore.Controllers
                     message = Common.Message.SUCCESS,
                     data = lstCustomers,
                     pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
-                    totalpage = totalPage-1
+                    totalpage = totalPage
                 });
             }
             catch (Exception ex)
