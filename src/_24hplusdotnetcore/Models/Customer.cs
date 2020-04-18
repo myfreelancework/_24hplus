@@ -9,6 +9,7 @@ namespace _24hplusdotnetcore.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        public string ContractCode { get; set; }
         [BsonRequired]
         public string UserName { get; set; }
         [BsonRequired]
@@ -35,6 +36,7 @@ namespace _24hplusdotnetcore.Models
 
         public Disburement Disburement { get; set; }
         public Sale SaleInfo { get; set; }
+        public Return Return { get; set; }
     }
 
     public class Personal {
@@ -135,5 +137,11 @@ namespace _24hplusdotnetcore.Models
         public string Dependency { get; set; }
         public string Address { get; set; }
     }
-
+    public class Return 
+    {
+        public string Department { get; set; }
+        public string Status { get; set; }
+        public string Reason { get; set; }
+        public string Note { get; set; }
+    }
 }
