@@ -19,7 +19,7 @@ namespace _24hplusdotnetcore.Services
             _customer = database.GetCollection<Customer>(MongoCollection.CustomerCollection);
             _logger = logger;
         }
-        public List<Customer> GetList(string UserName, DateTime? DateFrom, DateTime? DateTo, string Status, string greentype,string customername, int? pagenumber, int? pagesize, ref int totalPage)
+        public List<Customer> GetList(string UserName, DateTime? DateFrom, DateTime? DateTo, string Status, string greentype,string customername, int? pagenumber, int? pagesize, ref int totalPage, ref int totalrecord)
         {
             var lstCustomer = new List<Customer>();
             DateTime _datefrom = DateFrom.HasValue ? Convert.ToDateTime(DateFrom) : new DateTime(0001, 01, 01);
@@ -49,6 +49,7 @@ namespace _24hplusdotnetcore.Services
                 var lstCount = _customer.Find(filterUserName).SortBy(c => c.CreatedDate).ToList().Count;
                 lstCustomer = _customer.Find(filterUserName).SortBy(c => c.CreatedDate)
                .Skip((pagenumber != null && pagenumber > 0) ? ((pagenumber - 1) * _pagesize) : 0).Limit(_pagesize).ToList();
+                totalrecord = lstCount;
                 if (lstCount == 0)
                 {
                     totalPage = 0;

@@ -30,6 +30,15 @@ namespace _24hplusdotnetcore.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(greentype))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ResponseContext 
+                    { 
+                        code = (int)Common.ResponseCode.ERROR, 
+                        message = "Thiếu username hoặc greentype",
+                        data = null
+                    });
+                }
                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
                     return Ok(new ResponseContext
                     {
@@ -39,7 +48,8 @@ namespace _24hplusdotnetcore.Controllers
                     });
                 var lstCustomers = new List<Customer>();
                 int totalPage = 0;
-                lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, greentype, customername, pagenumber, pagesize, ref totalPage) ;
+                int totalrecord = 0;
+                lstCustomers = _customerServices.GetList(username, datefrom, dateto, status, greentype, customername, pagenumber, pagesize, ref totalPage, ref totalrecord) ;
 
                 var lstCustomerOptimization = new List<dynamic>();
                 
@@ -72,7 +82,8 @@ namespace _24hplusdotnetcore.Controllers
                     message = Common.Message.SUCCESS,
                     data = lstCustomerOptimization,
                     pagenumber = pagenumber.HasValue? (int)pagenumber : 1,
-                    totalpage = totalPage
+                    totalpage = totalPage,
+                    totalrecord = totalrecord
                 });
             }
             catch (Exception ex)
