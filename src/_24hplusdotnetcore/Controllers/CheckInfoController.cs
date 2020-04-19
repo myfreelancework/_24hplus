@@ -44,5 +44,29 @@ namespace _24hplusdotnetcore.Controllers
                 });
             }
         }
+        [HttpGet]
+        [Route("api/checkduplicate")]
+        public ActionResult<ResponseContext> CheckDuplicate([FromQuery] string greentype, [FromQuery] string citizenId)
+        {
+            try
+            {
+                var response = _checkInforServices.CheckDuplicateByType(greentype, citizenId);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = response
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseMessage
+                {
+                    status = "ERROR",
+                    message = ex.Message
+                });
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using _24hplusdotnetcore.Common;
 using _24hplusdotnetcore.Models;
@@ -12,12 +13,14 @@ namespace _24hplusdotnetcore.Services
     {
         private readonly ILogger<ProductCategoryServices> _logger;
         private readonly IMongoCollection<ProductCategory> _productCategory;
+        private readonly IMongoCollection<Product> _product;
         public ProductCategoryServices(ILogger<ProductCategoryServices> logger, IMongoDbConnection connection)
         {
             _logger = logger;
             var client = new MongoClient(connection.ConnectionString);
             var database = client.GetDatabase(connection.DataBase);
             _productCategory = database.GetCollection<ProductCategory>(MongoCollection.ProductCategoryCollection);
+            _product = database.GetCollection<Product>(MongoCollection.Product);
         }
         public List<ProductCategory> GetProductCategories()
         {
@@ -32,32 +35,58 @@ namespace _24hplusdotnetcore.Services
             }
             return lstProductCategories;
         }
-        public ProductCategory GetProductCategory(string ProductCategoryId)
+        public dynamic GetProductCategory(string ProductCategoryId)
         {
-            var objProductCategory = new ProductCategory();
+            dynamic objProductDetails = new ExpandoObject();
             try
             {
-                objProductCategory = _productCategory.Find(p => p.ProductCategoryId == ProductCategoryId).FirstOrDefault();
+                var objProductCategory = _productCategory.Find(p => p.ProductCategoryId == ProductCategoryId).FirstOrDefault();
+                if (objProductCategory != null)
+                {
+                    
+                    objProductDetails.Id = objProductCategory.Id;
+                    objProductDetails.ProductCategoryId = objProductCategory.ProductCategoryId;
+                    objProductDetails.ProductCategoryName = objProductCategory.ProductCategoryName;
+                    objProductDetails.GreenType = objProductCategory.GreenType;
+                    objProductDetails.Note = objProductCategory.Note;
+                    var lstProducts = new List<Product>();
+                    lstProducts = _product.Find(p => p.ProductCategoryId == objProductCategory.ProductCategoryId).ToList();
+                    objProductDetails.Products = lstProducts;
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            return objProductCategory;
+            return objProductDetails;
         }
-        public List<ProductCategory> GetProductCategoryBygreen(string greentId)
+        public List<dynamic> GetProductCategoryBygreen(string greentId)
         {
 
             var lstProductCategory = new List<ProductCategory>();
+            var lstProductDetails = new List<dynamic>();
             try
             {
                 lstProductCategory = _productCategory.Find(p => p.GreenType == greentId).ToList();
+               
+                for (int i = 0; i < lstProductCategory.Count; i++)
+                {
+                    dynamic objProductDetails = new ExpandoObject();
+                    var lstProduct = _product.Find(p => p.ProductCategoryId == lstProductCategory[i].ProductCategoryId).ToList();
+                    objProductDetails.Id = lstProductCategory[i].Id;
+                    objProductDetails.ProductCategoryId = lstProductCategory[i].ProductCategoryId;
+                    objProductDetails.ProductCategoryName = lstProductCategory[i].ProductCategoryName;
+                    objProductDetails.GreenType = lstProductCategory[i].GreenType;
+                    objProductDetails.Note = lstProductCategory[i].Note;
+                    objProductDetails.Products = lstProduct;
+                    lstProductDetails.Add(objProductDetails);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            return lstProductCategory;
+            return lstProductDetails;
         }
         public ProductCategory Create(ProductCategory productCategory)
         {

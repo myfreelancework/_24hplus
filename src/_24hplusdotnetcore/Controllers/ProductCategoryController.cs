@@ -49,7 +49,7 @@ namespace _24hplusdotnetcore.Controllers
         [Route("api/productcategory/{ProductCategoryId}")]
         public ActionResult<ResponseContext> Get(string ProductCategoryId)
         {
-            var objProductCategory = new ProductCategory();
+            dynamic objProductCategory;
             try
             {
                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
@@ -60,7 +60,12 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 objProductCategory = _productCategoryServices.GetProductCategory(ProductCategoryId);
-                return Ok(objProductCategory);
+                return Ok(new ResponseContext
+                {
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = objProductCategory
+                });
             }
             catch (Exception ex)
             {
@@ -72,7 +77,7 @@ namespace _24hplusdotnetcore.Controllers
         [Route("api/productcategory")]
         public ActionResult<ResponseContext> GetProdctCategoryByGreenType([FromQuery]string greentype)
         {
-            var lstProductCategory = new List<ProductCategory>();
+            dynamic lstProductCategory = new List<dynamic>();
             try
             {
                 if ((bool)HttpContext.Items["isLoggedInOtherDevice"])
@@ -83,7 +88,11 @@ namespace _24hplusdotnetcore.Controllers
                         data = null
                     });
                 lstProductCategory = _productCategoryServices.GetProductCategoryBygreen(greentype);
-                return Ok(lstProductCategory);
+                return Ok(new ResponseContext { 
+                    code = (int)Common.ResponseCode.SUCCESS,
+                    message = Common.Message.SUCCESS,
+                    data = lstProductCategory
+                });
             }
             catch (Exception ex)
             {
