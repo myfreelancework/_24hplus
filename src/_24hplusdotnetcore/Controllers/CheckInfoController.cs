@@ -54,7 +54,7 @@ namespace _24hplusdotnetcore.Controllers
                 return Ok(new ResponseContext
                 {
                     code = (int)Common.ResponseCode.SUCCESS,
-                    message = Common.Message.SUCCESS,
+                    message = response.returnMes,
                     data = response
                 });
             }

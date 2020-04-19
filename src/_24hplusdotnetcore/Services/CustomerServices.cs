@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _24hplusdotnetcore.Services
 {
@@ -155,12 +156,18 @@ namespace _24hplusdotnetcore.Services
                 var lstCustomer = _customer.Find(c => c.UserName == userName && c.GreenType == GreenType).ToList();
                 if (lstCustomer != null && lstCustomer.Count > 0)
                 {
-                    var statusdraft = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.DRAFT).Count;
-                    var statusreturn = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.RETURN).Count;
-                    var statussubmit = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.SUBMIT).Count;
-                    var statusreject = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.REJECT).Count;
-                    var statusapprove = lstCustomer.FindAll(l => l.Status.ToUpper() == CustomerStatus.APPROVE).Count;
+                    var statusdraft = lstCustomer.Where(l => string.Equals(l.Status, CustomerStatus.DRAFT, StringComparison.CurrentCultureIgnoreCase)).ToList().Count;
+
+                    var statusreturn = lstCustomer.Where(l => string.Equals(l.Status, CustomerStatus.RETURN, StringComparison.CurrentCultureIgnoreCase)).ToList().Count;
+
+                    var statussubmit = lstCustomer.Where(l => string.Equals(l.Status, CustomerStatus.SUBMIT, StringComparison.CurrentCultureIgnoreCase)).ToList().Count;
+
+                    var statusreject = lstCustomer.Where(l => string.Equals(l.Status, CustomerStatus.REJECT, StringComparison.CurrentCultureIgnoreCase)).ToList().Count;
+
+                    var statusapprove = lstCustomer.Where(l => string.Equals(l.Status, CustomerStatus.APPROVE, StringComparison.CurrentCultureIgnoreCase)).ToList().Count;
+
                     var all = lstCustomer.Count;
+
                     statusCount.Draft = statusdraft;
                     statusCount.Return = statusreturn;
                     statusCount.Submit = statussubmit;
