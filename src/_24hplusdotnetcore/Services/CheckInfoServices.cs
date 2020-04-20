@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 
 namespace _24hplusdotnetcore.Services
 {
@@ -92,8 +93,8 @@ namespace _24hplusdotnetcore.Services
                     request.AddHeader("Authorization", "Bearer "+token+"");
                     request.AddHeader("x-security", ""+Common.Config.CredMC_Security_Key+"");
                     IRestResponse response = client.Execute(request);
-                    dynamic content = JsonConvert.DeserializeObject<dynamic>(response.Content);
-                    return content;
+                    List<dynamic> content = JsonConvert.DeserializeObject<List<dynamic>>(response.Content);
+                    return content.ToArray()[0];
                 }
                 else
                 {
