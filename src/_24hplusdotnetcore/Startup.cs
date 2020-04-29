@@ -48,6 +48,7 @@ namespace _24hplusdotnetcore
             services.AddSingleton<FileUploadServices>();
             services.AddSingleton<PaymentServices>();
             services.AddSingleton<CheckInfoServices>();
+            services.AddSingleton<NotificationServices>();
             #endregion
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -91,7 +92,6 @@ namespace _24hplusdotnetcore
             //     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_GCM,
             //     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
             // }).SetApplicationName("crmhubdotnetcore");
-                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
